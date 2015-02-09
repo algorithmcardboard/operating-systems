@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include "readers/objectmodulereader.h"
 
 using namespace std;
 
@@ -9,7 +10,4 @@ int main(int argc, char* argv[]){
   }
 	char ch;
   fstream fin("file", fstream::in);
-  while(fin >> noskipws >> ch){
-    cout << ch;
-  }
 }

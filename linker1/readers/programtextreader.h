@@ -8,12 +8,8 @@
 using namespace std;
 
 class ProgramTextReader : protected AbstractReader{
-  private:
-    fstream* fin;
-
   public:
-    ProgramTextReader(fstream& fin){
-      this->fin = &(fin);
+    ProgramTextReader(fstream& fin) : AbstractReader(fin){
     };
 
     void doFirstPass(){
@@ -21,6 +17,9 @@ class ProgramTextReader : protected AbstractReader{
       *(this->fin) >> ch;
         cout << "PTR " << ch << "\n";
     };
+
+    void doSecondPass(){
+    }
 };
 
 #endif

@@ -26,6 +26,7 @@ class ObjectModuleReader{
     ObjectModuleReader(char* file_name){
       this->fileName = file_name;
       this->fin = new fstream(this->fileName, fstream::in);
+      this->fin->unsetf(ios_base::skipws);
 
       this->dflReader = new DefinitionListReader(*(this->fin));
       this->uslReader = new UseListReader(*(this->fin));
@@ -46,8 +47,8 @@ class ObjectModuleReader{
 
       while(!this->fin->eof()){
         this->dflReader->doFirstPass();
-        this->uslReader->doFirstPass();
-        this->prtReader->doFirstPass();
+        //this->uslReader->doFirstPass();
+        //this->prtReader->doFirstPass();
       }
       cout << " eof check is "<< this->fin->eof();
 

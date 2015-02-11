@@ -8,12 +8,9 @@
 using namespace std;
 
 class UseListReader : protected AbstractReader{
-  private:
-    fstream* fin;
 
   public:
-    UseListReader(fstream& fin){
-      this->fin = &(fin);
+    UseListReader(fstream& fin) : AbstractReader(fin){
     };
 
     void doFirstPass(){
@@ -21,6 +18,9 @@ class UseListReader : protected AbstractReader{
       *(this->fin) >> ch;
         cout << "ULR " << ch << "\n";
     };
+
+    void doSecondPass(){
+    }
 };
 
 #endif

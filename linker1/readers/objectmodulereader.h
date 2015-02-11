@@ -53,8 +53,8 @@ class ObjectModuleReader{
 
       while(!this->fin->eof()){
         this->dflReader->doFirstPass();
-        //this->uslReader->doFirstPass();
-        //this->prtReader->doFirstPass();
+        this->uslReader->doFirstPass();
+        this->prtReader->doFirstPass();
       }
 
       return objModules;

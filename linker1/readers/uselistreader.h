@@ -14,9 +14,15 @@ class UseListReader : protected AbstractReader{
     };
 
     void doFirstPass(){
-      char ch;
-      *(this->fin) >> ch;
-        cout << "ULR " << ch << "\n";
+      Token<int> ulCount = getNextTokenAsInteger();
+      if(ulCount.getValue() > 16){
+        cout << "Parse Error line "<<ulCount.getLineNumber() << " offset "<<ulCount.getColumnNumber()<< ": TO_MANY_USE_IN_MODULE\n";
+        exit(99);
+      }
+
+      for(int iterator = 0; iterator < ulCount.getValue(); iterator++){
+        Token<char*> symbol = getSymbol();
+      }
     };
 
     void doSecondPass(){

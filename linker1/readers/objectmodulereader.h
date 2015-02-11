@@ -50,7 +50,6 @@ class ObjectModuleReader{
         //this->uslReader->doFirstPass();
         //this->prtReader->doFirstPass();
       }
-      cout << " eof check is "<< this->fin->eof();
 
       return objModules;
     }

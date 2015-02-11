@@ -21,11 +21,15 @@ class AbstractReader {
 
     Token<char*> getNextToken(){
       char ch;
-      int position = 0, tokenStartLine = 0, tokenStartColumn = 0;
+      int position = 0, tokenStartLine = AbstractReader::lineNumber, tokenStartColumn = AbstractReader::columnNumber;
       char* token = new char[512];
       bool tokenStart = false, isWhiteSpace = false;
 
       while(*(this->fin) >> ch){
+        cout << "while is called. ch value is " << (int) ch << "\n";
+        if(this->fin->eof()){
+          cout << "reached eof \n";
+        }
         isWhiteSpace = (ch == ' ' || ch == '\n' || ch == '\t');
 
         AbstractReader::columnNumber++;
@@ -52,16 +56,22 @@ class AbstractReader {
       return newToken;
     }
 
+    Token<int> getNextTokenAsInteger(){
+      Token<char*> nextToken = getNextToken();
 
-    bool isInteger(char* string){
-    }
-
-    bool isAlphaNumeric(char* string){
+      char *last = 0;
+      int intVal = (int) strtol(nextToken.getValue(), &last, 10);
+      if(*last != 0 || intVal < 0){
+        cout << "Parse Error line "<< nextToken.getLineNumber() << " offset "<< nextToken.getColumnNumber() << ": NUM_EXPECTED\n";
+        exit(99);
+      }
+      return Token<int>(nextToken.getLineNumber(), nextToken.getColumnNumber(), intVal);
     }
 
     virtual void doFirstPass() = 0;
     virtual void doSecondPass() = 0;
 };
+
 int AbstractReader::lineNumber = 1;
 int AbstractReader::columnNumber = 0;
 #endif

@@ -75,6 +75,28 @@ class AbstractReader {
       return Token<int>(nextToken.getLineNumber(), nextToken.getColumnNumber(), intVal, nextToken.getLength());
     }
 
+    Token<char*> getSymbol(){
+      Token<char*> symbol = getNextToken();
+
+      if(symbol.getLength() == 0){
+        cout << "Parse Error line "<< symbol.getLineNumber() << " offset " << symbol.getColumnNumber()<< ": SYM_EXPECTED\n";
+        exit(99);
+      }
+
+      if(symbol.getLength() > 16){
+        cout << "Parse Error line "<< symbol.getLineNumber() << " offset " << symbol.getColumnNumber()<< ": SYM_TOLONG\n";
+        exit(99);
+      }
+      char ch = symbol.getValue()[0];
+
+      if(ch >= '0' &&  ch <= '9'){
+        cout << "Parse Error line "<< symbol.getLineNumber() << " offset " << symbol.getColumnNumber()<< ": SYM_EXPECTED\n";
+        exit(99);
+      }
+
+      return symbol;
+    }
+
     virtual void doFirstPass() = 0;
     virtual void doSecondPass() = 0;
 };

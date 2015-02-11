@@ -25,12 +25,18 @@ class ObjectModuleReader{
   public:
     ObjectModuleReader(char* file_name){
       this->fileName = file_name;
-      this->fin = new fstream(this->fileName, fstream::in);
+
+      this->fin = new fstream(this->fileName, fstream::in | ios::ate); //open at EOF to get the file size
+
+      long size = this->fin->tellg();
+
+      this->fin->seekg(0);
+
       this->fin->unsetf(ios_base::skipws);
 
-      this->dflReader = new DefinitionListReader(*(this->fin));
-      this->uslReader = new UseListReader(*(this->fin));
-      this->prtReader = new ProgramTextReader(*(this->fin));
+      this->dflReader = new DefinitionListReader(*(this->fin), size);
+      this->uslReader = new UseListReader(*(this->fin), size);
+      this->prtReader = new ProgramTextReader(*(this->fin), size);
     }
 
     /* RAIM */

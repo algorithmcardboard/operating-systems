@@ -9,7 +9,7 @@ using namespace std;
 
 class ProgramTextReader : protected AbstractReader{
   public:
-    ProgramTextReader(fstream& fin) : AbstractReader(fin){
+    ProgramTextReader(fstream& fin, long fs) : AbstractReader(fin, fs){
     };
 
     void doFirstPass(){

@@ -14,45 +14,52 @@ class AbstractReader {
   protected:
 
     fstream* fin;
+    long fileSize;
 
-    AbstractReader(fstream& fin){
+    AbstractReader(fstream& fin, long fileSize){
       this->fin = &(fin);
+      this->fileSize = fileSize;
     }
 
     Token<char*> getNextToken(){
       char ch;
+      int length = 0;
       int position = 0, tokenStartLine = AbstractReader::lineNumber, tokenStartColumn = AbstractReader::columnNumber;
       char* token = new char[512];
-      bool tokenStart = false, isWhiteSpace = false;
+      bool tokenStart = false, isWhiteSpace = false, emptyLine = true;
 
       while(*(this->fin) >> ch){
-        cout << "while is called. ch value is " << (int) ch << "\n";
-        if(this->fin->eof()){
-          cout << "reached eof \n";
-        }
-        isWhiteSpace = (ch == ' ' || ch == '\n' || ch == '\t');
-
-        AbstractReader::columnNumber++;
-
         if(ch == '\n'){
-          AbstractReader::lineNumber++;
-          AbstractReader::columnNumber = 0;
+          if(this->fin->tellg() != this->fileSize){
+            AbstractReader::lineNumber++;
+            AbstractReader::columnNumber = 1;
+          }
+          emptyLine = true;
+        }else{
+          emptyLine = false;
+          AbstractReader::columnNumber++;
         }
+
+        isWhiteSpace = (ch == ' ' || ch == '\n' || ch == '\t');
 
         if(tokenStart && isWhiteSpace){
           token[position] = '\0';
           break;
         }else if(isWhiteSpace){
+          tokenStartLine = AbstractReader::lineNumber;
+          tokenStartColumn = AbstractReader::columnNumber;
           continue;
         }else if(!tokenStart){ // token is beginning here
           tokenStartLine = AbstractReader::lineNumber;
-          tokenStartColumn = AbstractReader::columnNumber;
+          tokenStartColumn = AbstractReader::columnNumber -1;
+          tokenStart = true;
+          length = 0;
         }
 
-        tokenStart = true;
+        length++;
         token[position++] = ch;
       }
-      Token<char*> newToken(tokenStartLine, tokenStartColumn, token);
+      Token<char*> newToken(tokenStartLine, tokenStartColumn, token, length);
       return newToken;
     }
 
@@ -65,7 +72,7 @@ class AbstractReader {
         cout << "Parse Error line "<< nextToken.getLineNumber() << " offset "<< nextToken.getColumnNumber() << ": NUM_EXPECTED\n";
         exit(99);
       }
-      return Token<int>(nextToken.getLineNumber(), nextToken.getColumnNumber(), intVal);
+      return Token<int>(nextToken.getLineNumber(), nextToken.getColumnNumber(), intVal, nextToken.getLength());
     }
 
     virtual void doFirstPass() = 0;
@@ -73,5 +80,5 @@ class AbstractReader {
 };
 
 int AbstractReader::lineNumber = 1;
-int AbstractReader::columnNumber = 0;
+int AbstractReader::columnNumber = 1;
 #endif

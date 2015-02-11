@@ -10,7 +10,7 @@ using namespace std;
 class UseListReader : protected AbstractReader{
 
   public:
-    UseListReader(fstream& fin) : AbstractReader(fin){
+    UseListReader(fstream& fin, long fs) : AbstractReader(fin, fs){
     };
 
     void doFirstPass(){

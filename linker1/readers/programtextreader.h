@@ -37,7 +37,11 @@ class ProgramTextReader : protected AbstractReader{
         cout << "Parse Error line "<<prCount.getLineNumber() << " offset "<<prCount.getColumnNumber()<< ": TO_MANY_INSTR\n";
         exit(99);
       }
-      Token<char> addr = getAddressType();
+      int iterator = 0;
+      for(int iterator = 0; iterator < prCount.getValue(); iterator++){
+        Token<char> addr = getAddressType();
+        Token<char*> instruction = getNextToken();
+      } 
     };
 
     void doSecondPass(){

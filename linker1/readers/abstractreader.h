@@ -2,6 +2,7 @@
 #define ABSTRACT_READER_H
 
 #include "../ds/token.h"
+#include "../ds/symbol.h"
 
 using namespace std;
 
@@ -75,7 +76,7 @@ class AbstractReader {
       return Token<int>(nextToken.getLineNumber(), nextToken.getColumnNumber(), intVal, nextToken.getLength());
     }
 
-    Token<char*> getSymbol(){
+    Symbol getSymbol(){
       Token<char*> symbol = getNextToken();
 
       if(symbol.getLength() == 0){
@@ -94,11 +95,8 @@ class AbstractReader {
         exit(99);
       }
 
-      return symbol;
+      return Symbol(symbol);
     }
-
-    virtual void doFirstPass() = 0;
-    virtual void doSecondPass() = 0;
 };
 
 int AbstractReader::lineNumber = 1;

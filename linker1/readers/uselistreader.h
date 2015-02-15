@@ -21,7 +21,7 @@ class UseListReader : protected AbstractReader{
       }
 
       for(int iterator = 0; iterator < ulCount.getValue(); iterator++){
-        Token<char*> symbol = getSymbol();
+        Symbol symbol = getSymbol();
       }
     };
 

@@ -39,7 +39,7 @@ class ObjectModuleReader{
       this->prtReader = new ProgramTextReader(*(this->fin), size);
     }
 
-    /* RAIM */
+    /* RAII - Resource Allocation Is Initialization */
     ~ObjectModuleReader(){
       if(this->fin){
         this->fin->close();
@@ -47,15 +47,19 @@ class ObjectModuleReader{
     }
 
     list<ObjectModule> doFirstPass(){
+      int length = 0;
 
       list<ObjectModule> objModules;
       char ch;
 
       while(!this->fin->eof()){
-        this->dflReader->doFirstPass();
+        this->dflReader->doFirstPass(length);
         this->uslReader->doFirstPass();
-        this->prtReader->doFirstPass();
+        length += this->prtReader->doFirstPass();
+        //check size in symboltable and warn if address in DL greater than module size.
       }
+      SymbolTable& instance = SymbolTable::getInstance();
+      instance.printSymbols();
 
       return objModules;
     }

@@ -30,7 +30,7 @@ class ProgramTextReader : protected AbstractReader{
       this->availableMemory = TOTAL_ADDRESSABLE_MEMORY;
     };
 
-    void doFirstPass(){
+    int doFirstPass(){
       Token<int> prCount = getNextTokenAsInteger();
       this->availableMemory -= prCount.getValue();
       if(this->availableMemory < 0){
@@ -42,6 +42,7 @@ class ProgramTextReader : protected AbstractReader{
         Token<char> addr = getAddressType();
         Token<char*> instruction = getNextToken();
       } 
+      return prCount.getValue();
     };
 
     void doSecondPass(){

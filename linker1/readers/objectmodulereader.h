@@ -53,9 +53,12 @@ class ObjectModuleReader{
       char ch;
 
       while(!this->fin->eof()){
-        this->dflReader->doFirstPass(length);
+        int numDefinitions = this->dflReader->doFirstPass(length);
         this->uslReader->doFirstPass();
-        length += this->prtReader->doFirstPass();
+        int moduleLength = this->prtReader->doFirstPass();
+        length += moduleLength;
+        SymbolTable& instance = SymbolTable::getInstance();
+        instance.checkDefinitionLengths(numDefinitions, moduleLength);
         //check size in symboltable and warn if address in DL greater than module size.
       }
       SymbolTable& instance = SymbolTable::getInstance();

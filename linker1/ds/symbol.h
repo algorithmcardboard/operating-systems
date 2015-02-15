@@ -31,6 +31,10 @@ class Symbol{
       this->relativeAddress = relativeAddress;
     };
 
+    int getRelativeAddress(){
+      return this->relativeAddress;
+    }
+
     void setModuleBaseAddress(int moduleBaseAddress){
       this->moduleBaseAddress = moduleBaseAddress;
     };

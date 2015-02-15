@@ -38,6 +38,16 @@ class SymbolTable {
       }
     };
 
+    void checkDefinitionLengths(int currentDLSize, int moduleLength){
+      int totalSize = this->table->size();
+      for(int i = (totalSize - currentDLSize); i < totalSize; i++){
+        if(this->table->at(i).getRelativeAddress() >= moduleLength){
+          cout<< "Warning: Module 1: " << this->table->at(i).getToken() << " to big "<< this->table->at(i).getRelativeAddress() <<" (max="<< moduleLength-1 << ") assume zero relative\n";
+          this->table->at(i).setRelativeAddress(0);
+        }
+      }
+    }
+
   private:
     vector<Symbol>* table;
     map<string,int>* usedSymbols;
@@ -50,20 +60,8 @@ class SymbolTable {
     void printWarnings(){
     }
 
-    // C++ 03
-    // ========
-    // Dont forget to declare these two. You want to make sure they
-    // are unacceptable otherwise you may accidentally get copies of
-    // your singleton appearing.
     SymbolTable(SymbolTable const&);
     void operator=(SymbolTable const&);
-
-    // C++ 11
-    // =======
-    // We can use the better technique of deleting the methods
-    // we don't want.
-    //SymbolTable(SymbolTable const&) = delete;
-    //void operator=(SymbolTable const&) = delete;
 };
 
 #endif

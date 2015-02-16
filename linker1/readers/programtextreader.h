@@ -13,7 +13,7 @@ class ProgramTextReader : protected AbstractReader{
     int availableMemory;
 
     Token<char> getAddressType(){
-      Token<char*> addressType = getNextToken();
+      Token<char*> addressType = getNextToken(false);
       if(addressType.getLength() != 1){
         cout << "Parse Error line "<< addressType.getLineNumber() << " offset "<<addressType.getColumnNumber()<< ": ADDR_EXPECTED\n";
         exit(99);
@@ -31,7 +31,7 @@ class ProgramTextReader : protected AbstractReader{
     };
 
     int doFirstPass(){
-      Token<int> prCount = getNextTokenAsInteger();
+      Token<int> prCount = getNextTokenAsInteger(true);
       this->availableMemory -= prCount.getValue();
       if(this->availableMemory < 0){
         cout << "Parse Error line "<<prCount.getLineNumber() << " offset "<<prCount.getColumnNumber()<< ": TO_MANY_INSTR\n";
@@ -40,7 +40,7 @@ class ProgramTextReader : protected AbstractReader{
       int iterator = 0;
       for(int iterator = 0; iterator < prCount.getValue(); iterator++){
         Token<char> addr = getAddressType();
-        Token<char*> instruction = getNextToken();
+        Token<char*> instruction = getNextToken(true);
       } 
       return prCount.getValue();
     };

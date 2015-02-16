@@ -54,6 +54,9 @@ class ObjectModuleReader{
 
       while(!this->fin->eof()){
         int numDefinitions = this->dflReader->doFirstPass(length);
+        if(this->fin->eof()){
+          break;
+        }
         this->uslReader->doFirstPass();
         int moduleLength = this->prtReader->doFirstPass();
         length += moduleLength;

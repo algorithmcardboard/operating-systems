@@ -14,7 +14,7 @@ class UseListReader : protected AbstractReader{
     };
 
     void doFirstPass(){
-      Token<int> ulCount = getNextTokenAsInteger();
+      Token<int> ulCount = getNextTokenAsInteger(true);
       if(ulCount.getValue() > 16){
         cout << "Parse Error line "<<ulCount.getLineNumber() << " offset "<<ulCount.getColumnNumber()<< ": TO_MANY_USE_IN_MODULE\n";
         exit(99);

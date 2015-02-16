@@ -12,6 +12,11 @@ class AbstractReader {
     static int lineNumber;
     static int columnNumber;
 
+    static void cleanup(){
+      lineNumber = 1;
+      columnNumber = 1;
+    }
+
   protected:
 
     fstream* fin;
@@ -99,7 +104,7 @@ class AbstractReader {
         cout << "Parse Error line "<< symbol.getLineNumber() << " offset " << symbol.getColumnNumber()<< ": SYM_EXPECTED\n";
         exit(99);
       }
-
+      
       return Symbol(symbol);
     }
 };

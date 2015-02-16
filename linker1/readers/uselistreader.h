@@ -2,8 +2,10 @@
 #define USE_LIST_READER_H
 
 #include <fstream>
+#include <map>
 #include <iostream>
 #include "abstractreader.h"
+#include "../ds/uselist.h"
 
 using namespace std;
 
@@ -25,7 +27,17 @@ class UseListReader : protected AbstractReader{
       }
     };
 
-    void doSecondPass(){
+    map<int, UseList>* doSecondPass(){
+
+      map<int,UseList>* useList= new map<int, UseList>();
+
+      Token<int> ulCount = getNextTokenAsInteger(true);
+
+      for(int iterator=0; iterator < ulCount.getValue(); iterator++){
+        Symbol* symbol = new Symbol(getSymbol());
+        useList->insert(pair<int, UseList>(iterator, UseList(symbol)));
+      }
+      return useList;
     }
 };
 

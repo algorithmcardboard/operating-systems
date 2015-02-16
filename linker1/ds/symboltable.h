@@ -27,7 +27,6 @@ class SymbolTable {
     }
 
     void printSymbols(){
-      this->printWarnings();
       cout << "Symbol Table\n";
       for(vector<Symbol>::iterator ci = this->table->begin(); ci != this->table->end(); ++ci){
         cout << ci->getToken() << "=" << ci->getAddress() << " ";
@@ -48,6 +47,23 @@ class SymbolTable {
       }
     }
 
+    bool isDefined(string token){
+      map<string,int>::iterator mi = this->usedSymbols->find(token);
+      if(mi != this->usedSymbols->end()){
+        return true;
+      }
+      return false;
+    }
+
+    int getAddress(string token){
+      map<string,int>::iterator mi = this->usedSymbols->find(token);
+      if(mi != this->usedSymbols->end()){
+        this->table->at(mi->second -1).setUsed(true);
+        return this->table->at(mi->second - 1).getAddress();
+      }
+      return 0;
+    }
+
   private:
     vector<Symbol>* table;
     map<string,int>* usedSymbols;
@@ -55,9 +71,6 @@ class SymbolTable {
     SymbolTable(){ 
       this->table = new vector<Symbol>();
       this->usedSymbols = new map<string, int>();
-    }
-
-    void printWarnings(){
     }
 
     SymbolTable(SymbolTable const&);

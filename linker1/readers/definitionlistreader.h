@@ -38,6 +38,11 @@ class DefinitionListReader : protected AbstractReader{
     };
 
     void doSecondPass(){
+      Token<int> dlCount = getNextTokenAsInteger(false);
+      for(int iterator = 0; iterator < dlCount.getValue(); iterator++){
+        Symbol symbol = getSymbol();
+        Token<int> symbolValue = getNextTokenAsInteger(false);
+      }
     }
 };
 

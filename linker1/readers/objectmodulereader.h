@@ -72,14 +72,22 @@ class ObjectModuleReader{
 
     void firstPassCleanup(){
       cout << "\n";
+      this->fin->clear();
       this->fin->seekg(0);
+      AbstractReader::cleanup();
+      cout <<"Memory Map\n";
     }
 
     void doSecondPass(){
+      int memoryAddress = 0;
       while(!this->fin->eof()){
         this->dflReader->doSecondPass();
-        this->uslReader->doSecondPass();
-        this->prtReader->doSecondPass();
+        if(this->fin->eof()){
+          break;
+        }
+        map<int,UseList>* useList = this->uslReader->doSecondPass();
+        memoryAddress += this->prtReader->doSecondPass(useList, memoryAddress);
+        /* print unused symbols from uselist */
       }
     };
 };

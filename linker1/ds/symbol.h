@@ -47,6 +47,18 @@ class Symbol{
       return this->moduleBaseAddress  + this->relativeAddress;
     }
 
+    int getModuleBaseAddress(){
+      return this->moduleBaseAddress;
+    }
+
+    bool getUsed(){
+      return this->isUsed;
+    }
+
+    void setUsed(bool isUsed){
+      this->isUsed = isUsed;
+    }
+
     void setMultipleDefinitions(bool multipleDefinitions){
       this->multipleDefinitions = multipleDefinitions;
     }

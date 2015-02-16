@@ -77,6 +77,8 @@ class ProgramTextReader : protected AbstractReader{
           if(operand >= moduleLengths->at(moduleCount)){
             operand = moduleBaseAddress;
             warning = "Error: Relative address exceeds module size; zero used"; // rule 9
+          }else{
+            operand = operand+moduleBaseAddress;
           }
         }else if(addressing == 'E'){
           map<int, UseList>::iterator mi = useList->find(operand);

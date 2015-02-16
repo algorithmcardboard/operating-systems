@@ -3,6 +3,7 @@
 #include <list>
 
 #include "readers/objectmodulereader.h"
+#include "ds/symboltable.h"
 
 using namespace std;
 
@@ -14,4 +15,6 @@ int main(int argc, char* argv[]){
   reader->doFirstPass();
   reader->firstPassCleanup();
   reader->doSecondPass();
+  SymbolTable& instance = SymbolTable::getInstance();
+  instance.printUnusedSymbols();
 }

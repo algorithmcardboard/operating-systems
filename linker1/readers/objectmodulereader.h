@@ -56,7 +56,7 @@ class ObjectModuleReader{
       char ch;
 
       while(!this->fin->eof()){
-        int numDefinitions = this->dflReader->doFirstPass(length);
+        int numDefinitions = this->dflReader->doFirstPass(length, moduleCount);
         if(this->fin->eof()){
           break;
         }

@@ -13,6 +13,7 @@ class Symbol{
     bool multipleDefinitions;
     bool isUsed;
     string token;
+    int moduleCount;
     int moduleBaseAddress;
     int relativeAddress;
 
@@ -25,6 +26,14 @@ class Symbol{
       this->isUsed = false;
       this->multipleDefinitions = false;
       this->moduleBaseAddress = 0;
+    }
+
+    void setModuleCount(int moduleCount){
+      this->moduleCount = moduleCount;
+    }
+
+    int getModuleCount(){
+      return this->moduleCount;
     }
 
     void setRelativeAddress(int relativeAddress){

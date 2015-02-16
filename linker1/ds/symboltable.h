@@ -37,6 +37,14 @@ class SymbolTable {
       }
     };
 
+    void printUnusedSymbols(){
+      for(vector<Symbol>::iterator ci = this->table->begin(); ci != this->table->end(); ++ci){
+        if(!ci->getUsed()){
+          cout << "Warning: Module "<< ci->getModuleCount()<<": "<< ci->getToken() <<" was defined but never used\n";
+        }
+      }
+    }
+
     void checkDefinitionLengths(int currentDLSize, int moduleLength, int moduleCount){
       int totalSize = this->table->size();
       for(int i = (totalSize - currentDLSize); i < totalSize; i++){

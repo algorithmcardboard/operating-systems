@@ -17,7 +17,7 @@ class DefinitionListReader : protected AbstractReader{
     DefinitionListReader(fstream& fin, long fs) : AbstractReader(fin, fs){
     };
 
-    int doFirstPass(int baseModuleLength){
+    int doFirstPass(int baseModuleLength, int moduleCount){
       Token<int> dlCount = getNextTokenAsInteger(false);
       if(dlCount.getValue() > 16){
         cout << "Parse Error line "<<dlCount.getLineNumber() << " offset "<<dlCount.getColumnNumber()<< ": TO_MANY_DEF_IN_MODULE\n";
@@ -30,6 +30,7 @@ class DefinitionListReader : protected AbstractReader{
 
         symbol.setRelativeAddress(symbolValue.getValue());
         symbol.setModuleBaseAddress(baseModuleLength);
+        symbol.setModuleCount(moduleCount);
 
         SymbolTable& instance = SymbolTable::getInstance();
         instance.push(symbol);

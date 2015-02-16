@@ -46,10 +46,10 @@ class ObjectModuleReader{
       }
     }
 
-    list<ObjectModule> doFirstPass(){
+    void doFirstPass(){
       int length = 0;
+      int moduleCount = 1;
 
-      list<ObjectModule> objModules;
       char ch;
 
       while(!this->fin->eof()){
@@ -58,14 +58,27 @@ class ObjectModuleReader{
         int moduleLength = this->prtReader->doFirstPass();
         length += moduleLength;
         SymbolTable& instance = SymbolTable::getInstance();
-        instance.checkDefinitionLengths(numDefinitions, moduleLength);
+        instance.checkDefinitionLengths(numDefinitions, moduleLength, moduleCount);
+        moduleCount++;
         //check size in symboltable and warn if address in DL greater than module size.
       }
       SymbolTable& instance = SymbolTable::getInstance();
       instance.printSymbols();
 
-      return objModules;
     }
+
+    void firstPassCleanup(){
+      cout << "\n";
+      this->fin->seekg(0);
+    }
+
+    void doSecondPass(){
+      while(!this->fin->eof()){
+        this->dflReader->doSecondPass();
+        this->uslReader->doSecondPass();
+        this->prtReader->doSecondPass();
+      }
+    };
 };
 
 #endif

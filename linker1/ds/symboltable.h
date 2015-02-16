@@ -38,11 +38,11 @@ class SymbolTable {
       }
     };
 
-    void checkDefinitionLengths(int currentDLSize, int moduleLength){
+    void checkDefinitionLengths(int currentDLSize, int moduleLength, int moduleCount){
       int totalSize = this->table->size();
       for(int i = (totalSize - currentDLSize); i < totalSize; i++){
         if(this->table->at(i).getRelativeAddress() >= moduleLength){
-          cout<< "Warning: Module 1: " << this->table->at(i).getToken() << " to big "<< this->table->at(i).getRelativeAddress() <<" (max="<< moduleLength-1 << ") assume zero relative\n";
+          cout<< "Warning: Module "<< moduleCount <<": " << this->table->at(i).getToken() << " to big "<< this->table->at(i).getRelativeAddress() <<" (max="<< moduleLength-1 << ") assume zero relative\n";
           this->table->at(i).setRelativeAddress(0);
         }
       }

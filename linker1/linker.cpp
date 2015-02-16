@@ -11,5 +11,7 @@ int main(int argc, char* argv[]){
     cout << "Command should be called with the input file as argument.";
   }
   ObjectModuleReader* reader = new ObjectModuleReader(argv[1]);
-  list<ObjectModule> objmodules = reader->doFirstPass();
+  reader->doFirstPass();
+  reader->firstPassCleanup();
+  reader->doSecondPass();
 }

@@ -21,6 +21,7 @@ class ObjectModuleReader{
     DefinitionListReader* dflReader;
     UseListReader* uslReader;
     ProgramTextReader* prtReader;
+    map<int, int>* moduleLengths;
 
   public:
     ObjectModuleReader(char* file_name){
@@ -37,6 +38,8 @@ class ObjectModuleReader{
       this->dflReader = new DefinitionListReader(*(this->fin), size);
       this->uslReader = new UseListReader(*(this->fin), size);
       this->prtReader = new ProgramTextReader(*(this->fin), size);
+
+      this->moduleLengths = new map<int, int>();
     }
 
     /* RAII - Resource Allocation Is Initialization */
@@ -62,12 +65,12 @@ class ObjectModuleReader{
         length += moduleLength;
         SymbolTable& instance = SymbolTable::getInstance();
         instance.checkDefinitionLengths(numDefinitions, moduleLength, moduleCount);
+        this->moduleLengths->insert(pair<int, int>(moduleCount, moduleLength));
         moduleCount++;
         //check size in symboltable and warn if address in DL greater than module size.
       }
       SymbolTable& instance = SymbolTable::getInstance();
       instance.printSymbols();
-
     }
 
     void firstPassCleanup(){
@@ -80,13 +83,16 @@ class ObjectModuleReader{
 
     void doSecondPass(){
       int memoryAddress = 0;
+      int moduleBaseAddress = 0;
+      int moduleCount = 1;
       while(!this->fin->eof()){
         this->dflReader->doSecondPass();
         if(this->fin->eof()){
           break;
         }
         map<int,UseList>* useList = this->uslReader->doSecondPass();
-        memoryAddress += this->prtReader->doSecondPass(useList, memoryAddress);
+        moduleBaseAddress += this->prtReader->doSecondPass(useList, this->moduleLengths, moduleCount, moduleBaseAddress);
+        moduleCount++;
         /* print unused symbols from uselist */
       }
     };

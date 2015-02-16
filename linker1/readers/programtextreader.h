@@ -47,7 +47,8 @@ class ProgramTextReader : protected AbstractReader{
       return prCount.getValue();
     };
 
-    int doSecondPass(map<int,UseList>* useList, int memoryAddress){
+    int doSecondPass(map<int,UseList>* useList, map<int, int>* moduleLengths, int moduleCount, int moduleBaseAddress){
+      int memoryAddress = 0;
       Token<int> prCount = getNextTokenAsInteger(true);
       int iterator =0;
       SymbolTable& st = SymbolTable::getInstance();
@@ -68,7 +69,16 @@ class ProgramTextReader : protected AbstractReader{
         int opcode = instructionVal / 1000;
         int operand  = instructionVal %1000;
 
-        if(addressing == 'E'){
+        if(addressing == 'I' && instructionOverflow){
+          warning = "Error: Illegal immediate value; treated as 9999"; // rule 10
+        }else if(instructionOverflow){
+          warning = "Error: Illegal opcode; treated as 9999"; //rule 11
+        } else if(addressing == 'R'){
+          if(operand >= moduleLengths->at(moduleCount)){
+            operand = moduleBaseAddress;
+            warning = "Error: Relative address exceeds module size; zero used"; // rule 9
+          }
+        }else if(addressing == 'E'){
           map<int, UseList>::iterator mi = useList->find(operand);
           if(mi == useList->end()){
             warning = "Error: External address exceeds length of uselist; treated as immediate"; // rule 6
@@ -79,19 +89,28 @@ class ProgramTextReader : protected AbstractReader{
             if(st.isDefined(token)){
               operand = st.getAddress(token);
             }else{
-              warning = "Error: " + token + " is not defined; zero used"; // rule 4
+              warning = "Error: " + token + " is not defined; zero used"; // rule 3
+              operand = 0;
             }
           }
-        }else if(addr.getValue() == 'A' && operand >= TOTAL_ADDRESSABLE_MEMORY){
+        }else if(addressing == 'A' && operand >= TOTAL_ADDRESSABLE_MEMORY){
           operand = 000;
-          warning = "Error: Absolute address exceeds machine size; zero used";
+          warning = "Error: Absolute address exceeds machine size; zero used"; // rule 8
         }
-        cout << setfill('0') << setw(3) << memoryAddress << ": ";
+
+        cout << setfill('0') << setw(3) << (moduleBaseAddress + memoryAddress) << ": ";
         cout << opcode << std::setfill('0') << std::setw(3) <<  operand << " " << warning <<"\n";
+
         memoryAddress++;
       }
 
-      return 0;
+      for(map<int, UseList>::iterator it = useList->begin(); it != useList->end(); ++it){
+        if(!it->second.getUsage()){
+          cout << "Warning: Module "<<moduleCount<<": "<<it->second.getToken()<<" appeared in the uselist but was not actually used\n";
+        }
+      }
+
+      return memoryAddress;
     }
 };
 

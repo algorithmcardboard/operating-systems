@@ -16,7 +16,7 @@ class UseListReader : protected AbstractReader{
     };
 
     void doFirstPass(){
-      Token<int> ulCount = getNextTokenAsInteger(true);
+      Token<int> ulCount = getNextTokenAsInteger(false);
       if(ulCount.getValue() > 16){
         cout << "Parse Error line "<<ulCount.getLineNumber() << " offset "<<ulCount.getColumnNumber()<< ": TO_MANY_USE_IN_MODULE\n";
         exit(99);
@@ -31,7 +31,7 @@ class UseListReader : protected AbstractReader{
 
       map<int,UseList>* useList= new map<int, UseList>();
 
-      Token<int> ulCount = getNextTokenAsInteger(true);
+      Token<int> ulCount = getNextTokenAsInteger(false);
 
       for(int iterator=0; iterator < ulCount.getValue(); iterator++){
         Symbol* symbol = new Symbol(getSymbol());

@@ -18,7 +18,7 @@ class DefinitionListReader : protected AbstractReader{
     };
 
     int doFirstPass(int baseModuleLength, int moduleCount){
-      Token<int> dlCount = getNextTokenAsInteger(false);
+      Token<int> dlCount = getNextTokenAsInteger(true);
       int multipleDefinitionCount = 0;
       if(dlCount.getValue() > 16){
         cout << "Parse Error line "<<dlCount.getLineNumber() << " offset "<<dlCount.getColumnNumber()<< ": TO_MANY_DEF_IN_MODULE\n";
@@ -43,7 +43,7 @@ class DefinitionListReader : protected AbstractReader{
     };
 
     void doSecondPass(){
-      Token<int> dlCount = getNextTokenAsInteger(false);
+      Token<int> dlCount = getNextTokenAsInteger(true);
       for(int iterator = 0; iterator < dlCount.getValue(); iterator++){
         Symbol symbol = getSymbol();
         Token<int> symbolValue = getNextTokenAsInteger(false);

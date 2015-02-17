@@ -14,7 +14,7 @@ class ProgramTextReader : protected AbstractReader{
     int availableMemory;
 
     Token<char> getAddressType(){
-      Token<char*> addressType = getNextToken(false);
+      Token<char*> addressType = getNextToken();
       if(addressType.getLength() != 1){
         cout << "Parse Error line "<< addressType.getLineNumber() << " offset "<<addressType.getColumnNumber()<< ": ADDR_EXPECTED\n";
         exit(99);
@@ -33,7 +33,7 @@ class ProgramTextReader : protected AbstractReader{
     };
 
     int doFirstPass(){
-      Token<int> prCount = getNextTokenAsInteger(true);
+      Token<int> prCount = getNextTokenAsInteger(false);
       this->availableMemory -= prCount.getValue();
       if(this->availableMemory < 0){
         cout << "Parse Error line "<<prCount.getLineNumber() << " offset "<<prCount.getColumnNumber()<< ": TO_MANY_INSTR\n";
@@ -42,14 +42,14 @@ class ProgramTextReader : protected AbstractReader{
       int iterator = 0;
       for(int iterator = 0; iterator < prCount.getValue(); iterator++){
         Token<char> addr = getAddressType();
-        Token<int> instruction = getNextTokenAsInteger(true);
+        Token<int> instruction = getNextTokenAsInteger(false);
       } 
       return prCount.getValue();
     };
 
     int doSecondPass(map<int,UseList>* useList, map<int, int>* moduleLengths, int moduleCount, int moduleBaseAddress){
       int memoryAddress = 0;
-      Token<int> prCount = getNextTokenAsInteger(true);
+      Token<int> prCount = getNextTokenAsInteger(false);
       int iterator =0;
       SymbolTable& st = SymbolTable::getInstance();
       for(int iterator = 0; iterator < prCount.getValue(); iterator++){

@@ -27,7 +27,7 @@ class AbstractReader {
       this->fileSize = fileSize;
     }
 
-    Token<char*> getNextToken(bool exitOnEOF){
+    Token<char*> getNextToken(){
       char ch;
       int length = 0;
       int position = 0, tokenStartLine = AbstractReader::lineNumber, tokenStartColumn = AbstractReader::columnNumber;
@@ -65,21 +65,24 @@ class AbstractReader {
         length++;
         token[position++] = ch;
       }
-      if(exitOnEOF && this->fin->eof()){
-        cout << "Parse Error line "<< tokenStartLine<<" offset "<< tokenStartColumn<< ": NUM_EXPECTED";
-        exit(99);
-      }
 
       Token<char*> newToken(tokenStartLine, tokenStartColumn, token, length);
       return newToken;
     }
 
-    Token<int> getNextTokenAsInteger(bool exitOnEOF){
-      Token<char*> nextToken = getNextToken(exitOnEOF);
+    Token<int> getNextTokenAsInteger(bool allowZeroLength){
+      Token<char*> nextToken = getNextToken();
+
+      if(!allowZeroLength){
+        if(nextToken.getLength() == 0){
+          cout << "Parse Error line "<< nextToken.getLineNumber() << " offset "<< nextToken.getColumnNumber() << ": NUM_EXPECTED\n";
+          exit(99);
+        }
+      }
 
       char *last = 0;
       int intVal = (int) strtol(nextToken.getValue(), &last, 10);
-      if(*last != 0 || intVal < 0){
+      if(*last != 0 || intVal < 0 ){
         cout << "Parse Error line "<< nextToken.getLineNumber() << " offset "<< nextToken.getColumnNumber() << ": NUM_EXPECTED\n";
         exit(99);
       }
@@ -87,7 +90,7 @@ class AbstractReader {
     }
 
     Symbol getSymbol(){
-      Token<char*> symbol = getNextToken(false);
+      Token<char*> symbol = getNextToken();
 
       if(symbol.getLength() == 0){
         cout << "Parse Error line "<< symbol.getLineNumber() << " offset " << symbol.getColumnNumber()<< ": SYM_EXPECTED\n";

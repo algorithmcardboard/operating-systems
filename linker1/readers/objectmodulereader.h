@@ -9,8 +9,6 @@
 #include "uselistreader.h"
 #include "programtextreader.h"
 
-#include "../ds/objectmodule.h"
-
 using namespace std;
 
 class ObjectModuleReader{

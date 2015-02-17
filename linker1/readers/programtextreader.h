@@ -42,7 +42,7 @@ class ProgramTextReader : protected AbstractReader{
       int iterator = 0;
       for(int iterator = 0; iterator < prCount.getValue(); iterator++){
         Token<char> addr = getAddressType();
-        Token<int> instruction = getNextTokenAsInteger(false);
+        Token<int> instruction = getNextTokenAsInteger(true);
       } 
       return prCount.getValue();
     };

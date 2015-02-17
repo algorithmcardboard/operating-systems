@@ -13,8 +13,6 @@ class Token{
     T token;
     int length;
 
-//    friend std::ostream& operator<<(std::ostream&, const Token&);
-
   public:
     Token(int lineNumber, int columnNumber, T token, int length){
       this->lineNumber = lineNumber;
@@ -39,10 +37,5 @@ class Token{
       return  this->length;
     };
 };
-
-/*
-std::ostream& operator<<(std::ostream &strm, const Token &t) {
-    return strm << "Token(" << t.lineNumber << ")";
-}*/
 
 #endif

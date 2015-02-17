@@ -26,6 +26,8 @@ class Symbol{
       this->isUsed = false;
       this->multipleDefinitions = false;
       this->moduleBaseAddress = 0;
+      moduleCount = 0;
+      relativeAddress = 0;
     }
 
     void setModuleCount(int moduleCount){

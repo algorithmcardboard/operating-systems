@@ -14,6 +14,7 @@ class UseList{
   public:
     UseList(Symbol* s){
       this->s = s;
+      this->isUsed = false;
     }
 
     string getToken(){

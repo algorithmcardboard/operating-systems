@@ -26,6 +26,10 @@ class ObjectModuleReader{
       this->fileName = file_name;
 
       this->fin = new fstream(this->fileName, fstream::in | ios::ate); //open at EOF to get the file size
+      if(!this->fin->good()){
+        cout << "Not a valid input file <"<<file_name<<">\n";
+        exit(99);
+      }
 
       long size = this->fin->tellg();
 

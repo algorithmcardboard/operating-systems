@@ -16,14 +16,17 @@ class SymbolTable {
       return instance;
     }
 
-    void push(Symbol s){
+    bool push(Symbol s){
       map<string,int>::iterator mi = this->usedSymbols->find(s.getToken());
+      bool hasMultipleDefinitions = false;
       if(mi != this->usedSymbols->end()){
         this->table->at(mi->second-1).setMultipleDefinitions(true);
+        hasMultipleDefinitions = true;
       }else{
         this->table->push_back(s);
         this->usedSymbols->insert(pair<string, int>(s.getToken(), this->table->size()));
       }
+      return hasMultipleDefinitions;
     }
 
     void printSymbols(){

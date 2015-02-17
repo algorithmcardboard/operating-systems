@@ -1,12 +1,6 @@
-1 z 0
-16 x fvsd 
- 
- sw df
- s 
- fs
- df 
- sg
- sfh
- h
-
-1 E 2000
+1 x 0
+0
+1 A 1000
+1 x 1
+0
+0

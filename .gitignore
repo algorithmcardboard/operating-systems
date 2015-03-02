@@ -32,4 +32,4 @@
 linker
 .nfs*
 
-lab2/src/scheduler
+lab2/src/bin/scheduler

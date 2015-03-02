@@ -31,3 +31,5 @@
 *.swp
 linker
 .nfs*
+
+lab2/src/scheduler

@@ -1,5 +1,7 @@
 #include <fstream>
 #include <string>
+#include "ds/process.h"
+#include "ds/event.h"
 
 using namespace std;
 
@@ -52,6 +54,7 @@ string CPU::getError(){
 void CPU::start(){
   int arrivalTime, totalCPU, cpuBurst, ioBurst;
   while(*(inFile) >> arrivalTime >> totalCPU >> cpuBurst >> ioBurst){
+    Process* newProcess = new Process(arrivalTime, totalCPU, cpuBurst, ioBurst);
+    Event* newEvent = new Event(arrivalTime, newProcess->getPID(), 2, 3);
   }
 }
-

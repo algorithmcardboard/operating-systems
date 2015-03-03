@@ -8,8 +8,13 @@ Process::Process(int arrivalTime, int totalCPUTime, int cpuBurst, int ioBurst){
   this->totalCPUTime = totalCPUTime;
   this->cpuBurst = cpuBurst;
   this->ioBurst = ioBurst;
+  this->currentState = CREATED;
 }
 
 int Process::getPID(){
   return pid;
+}
+
+ProcessState Process::getCurrentState(){
+  return currentState;
 }

@@ -3,6 +3,8 @@
 
 using namespace std;
 
+class Process;
+
 class ProcessTable{
   private:
     map<int, Process>* table;

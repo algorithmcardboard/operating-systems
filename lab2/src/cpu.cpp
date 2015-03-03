@@ -27,6 +27,19 @@ CPU::CPU(char* inputFileName, char* randFileName){
   }
 }
 
+void CPU::populateEventQueue(){
+  int arrivalTime, totalCPU, cpuBurst, ioBurst;
+  while(*(inFile) >> arrivalTime >> totalCPU >> cpuBurst >> ioBurst){
+    Process* newProcess = new Process(arrivalTime, totalCPU, cpuBurst, ioBurst);
+    Event* eve = new Event(arrivalTime, newProcess->getPID(), newProcess->getCurrentState(), READY);
+    //ProcessTable.push(newProcess);
+    eventQueue.push(eve);
+  }
+}
+
+/*
+ * All public methods below this
+ */
 
 bool CPU::isGood(){
   return good;
@@ -37,12 +50,10 @@ string CPU::getError(){
 }
 
 void CPU::start(){
-  int arrivalTime, totalCPU, cpuBurst, ioBurst;
-  while(*(inFile) >> arrivalTime >> totalCPU >> cpuBurst >> ioBurst){
-    Process* newProcess = new Process(arrivalTime, totalCPU, cpuBurst, ioBurst);
-    Event* eve = new Event(arrivalTime, newProcess->getPID(), 2, 3);
-    eventQueue.push(eve);
-  }
+  populateEventQueue();
+
+  unsigned int time = 0;
+
   while(!eventQueue.empty()){
     Event* eve = eventQueue.top();
     cout << *(eve);

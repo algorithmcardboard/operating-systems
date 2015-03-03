@@ -5,7 +5,9 @@
 #include <queue>
 #include <vector>
 
+#include "ds/processstate.h"
 #include "ds/process.h"
+#include "ds/processtable.h"
 #include "ds/event.h"
 
 using namespace std;
@@ -25,6 +27,9 @@ class CPU{
       }
     };
     priority_queue<Event*, vector<Event*>, EventComparator> eventQueue;
+
+    void populateEventQueue();
+
   public:
     CPU(char*, char* );
     ~CPU();

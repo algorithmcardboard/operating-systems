@@ -1,36 +1,16 @@
-#include <fstream>
-#include <string>
-
-#include <queue>
-#include <vector>
-
-#include "ds/process.h"
-#include "ds/event.h"
+#include "cpu.h"
 
 using namespace std;
 
-class CPU{
-  private:
-    bool good;
-    string error;
-    ifstream *inFile, *randFile;
+// Destructor
+CPU::~CPU(){
+  inFile->close();
+  randFile->close();
+  delete inFile;
+  delete randFile;
+}
 
-    struct EventComparator{
-      bool operator()(const Event* event1, const Event* event2){
-        return event1->getTimestamp() > event2->getTimestamp();
-      }
-    };
-    priority_queue<Event*, vector<Event*>, EventComparator> eventQueue;
-  public:
-    CPU(char*, char* );
-    ~CPU();
-
-    bool isGood();
-    void start();
-    string getError();
-};
-
-
+// Constructor 
 CPU::CPU(char* inputFileName, char* randFileName){
   good = true;
   inFile = new ifstream(inputFileName);
@@ -47,12 +27,6 @@ CPU::CPU(char* inputFileName, char* randFileName){
   }
 }
 
-CPU::~CPU(){
-  inFile->close();
-  randFile->close();
-  delete inFile;
-  delete randFile;
-}
 
 bool CPU::isGood(){
   return good;
@@ -71,7 +45,7 @@ void CPU::start(){
   }
   while(!eventQueue.empty()){
     Event* eve = eventQueue.top();
-    cout << "Popping an event" << eve->getTimestamp();
+    cout << *(eve);
     eventQueue.pop();
   }
 }

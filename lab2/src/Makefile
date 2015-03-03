@@ -2,8 +2,11 @@ CC=g++
 CFLAGS=-I
 BINDIR=bin
 
-compile: init.cpp cpu.cpp event.o process.o processtable.o
-	$(CC) -o $(BINDIR)/scheduler init.cpp ds/event.cpp ds/process.cpp ds/processtable.cpp
+compile: init.cpp cpu.o event.o process.o processtable.o
+	$(CC) -o $(BINDIR)/scheduler init.cpp $(BINDIR)/cpu.o $(BINDIR)/event.o $(BINDIR)/process.o $(BINDIR)/processtable.o
+
+cpu.o: cpu.cpp cpu.h
+	$(CC) -c cpu.cpp -o $(BINDIR)/cpu.o
 
 event.o: ds/event.cpp ds/event.h
 	$(CC) -c ds/event.cpp -o $(BINDIR)/event.o

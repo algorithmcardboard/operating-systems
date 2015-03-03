@@ -1,7 +1,7 @@
 #include <iostream>
 #include <stdlib.h>
 
-#include "cpu.cpp"
+#include "cpu.h"
 
 using namespace std;
 

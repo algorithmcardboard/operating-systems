@@ -3,11 +3,11 @@
 unsigned int Process::globalPID = 0;
 
 Process::Process(int arrivalTime, int totalCPUTime, int cpuBurst, int ioBurst){
-  pid = globalPID++;
-  arrivalTime = arrivalTime;
-  totalCPUTime = totalCPUTime;
-  cpuBurst = cpuBurst;
-  ioBurst = ioBurst;
+  this->pid = globalPID++;
+  this->arrivalTime = arrivalTime;
+  this->totalCPUTime = totalCPUTime;
+  this->cpuBurst = cpuBurst;
+  this->ioBurst = ioBurst;
 }
 
 int Process::getPID(){

@@ -8,4 +8,5 @@ class Event{
     int newState;
   public:
     Event(int, int, int, int);
+    int getTimestamp() const;
 };

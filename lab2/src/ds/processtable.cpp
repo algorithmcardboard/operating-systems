@@ -6,5 +6,5 @@ ProcessTable& ProcessTable::getInstance(){
 }
 
 ProcessTable::ProcessTable(){ 
-  table = new map<int, Process>();
+  this->table = new map<int, Process>();
 }

@@ -1,5 +1,9 @@
 #include <fstream>
 #include <string>
+
+#include <queue>
+#include <vector>
+
 #include "ds/process.h"
 #include "ds/event.h"
 
@@ -10,6 +14,13 @@ class CPU{
     bool good;
     string error;
     ifstream *inFile, *randFile;
+
+    struct EventComparator{
+      bool operator()(const Event* event1, const Event* event2){
+        return event1->getTimestamp() > event2->getTimestamp();
+      }
+    };
+    priority_queue<Event*, vector<Event*>, EventComparator> eventQueue;
   public:
     CPU(char*, char* );
     ~CPU();
@@ -55,6 +66,12 @@ void CPU::start(){
   int arrivalTime, totalCPU, cpuBurst, ioBurst;
   while(*(inFile) >> arrivalTime >> totalCPU >> cpuBurst >> ioBurst){
     Process* newProcess = new Process(arrivalTime, totalCPU, cpuBurst, ioBurst);
-    Event* newEvent = new Event(arrivalTime, newProcess->getPID(), 2, 3);
+    Event* eve = new Event(arrivalTime, newProcess->getPID(), 2, 3);
+    eventQueue.push(eve);
+  }
+  while(!eventQueue.empty()){
+    Event* eve = eventQueue.top();
+    cout << "Popping an event" << eve->getTimestamp();
+    eventQueue.pop();
   }
 }

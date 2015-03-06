@@ -4,11 +4,13 @@
 
 #include <queue>
 #include <vector>
+#include <list>
 
 #include "ds/processstate.h"
 #include "ds/process.h"
 #include "ds/processtable.h"
 #include "ds/event.h"
+#include "util/randomnumbergenerator.cpp"
 
 using namespace std;
 
@@ -17,6 +19,7 @@ class CPU{
     bool good;
     string error;
     ifstream *inFile, *randFile;
+    RandomNumberGenerator* randGen;
 
     struct EventComparator{
       bool operator()(const Event* event1, const Event* event2){

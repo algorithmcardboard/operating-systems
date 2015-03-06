@@ -11,8 +11,8 @@ cpu.o: cpu.cpp cpu.h ds/processstate.h
 processstate.o: ds/processstate.h
 	$(CC) -c ds/processstate.h -o $(BINDIR)/processstate.o
 
-event.o: ds/event.cpp ds/event.h ds/processstate.h processstate.o
-	$(CC) -c ds/event.cpp $(BINDIR)/processstate.o  -o $(BINDIR)/event.o
+event.o: ds/event.cpp ds/event.h ds/processstate.h ds/processstate.h
+	$(CC) -c ds/event.cpp  -o $(BINDIR)/event.o
 
 process.o: ds/process.cpp ds/process.h ds/processstate.h processstate.o
 	$(CC) -c ds/process.cpp -o $(BINDIR)/process.o

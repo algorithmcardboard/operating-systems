@@ -3,8 +3,6 @@
 
 using namespace std;
 
-class Process;
-
 class ProcessTable{
   private:
     map<int, Process>* table;
@@ -13,4 +11,5 @@ class ProcessTable{
 
   public:
     static ProcessTable& getInstance();
+    void push(Process*);
 };

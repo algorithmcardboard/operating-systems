@@ -10,8 +10,40 @@ CPU::~CPU(){
   delete randFile;
 }
 
+Scheduler* CPU::getScheduler(char* schedulerSpec){
+  Scheduler* scheduler;
+  int quantum;
+  cout << "Scheduler is "<< schedulerSpec << endl;
+  char ch = schedulerSpec[0];
+  switch(ch){
+    case 'F':
+      scheduler = new FCFS();
+      break;
+    case 'L':
+      scheduler = new LCFS();
+      break;
+    case 'S':
+      scheduler = new SJF();
+      break;
+    case 'P':
+      schedulerSpec++;
+      quantum = atoi(schedulerSpec);
+      cout << "Quantum is "<< quantum << endl;
+      scheduler = new PriorityScheduler(quantum);
+      break;
+    case 'R':
+      schedulerSpec++;
+      quantum = atoi(schedulerSpec);
+      cout << "Quantum is "<< quantum << endl;
+      scheduler = new RoundRobin(quantum);
+      break;
+    default:
+      return NULL;
+  }
+}
+
 // Constructor 
-CPU::CPU(char* inputFileName, char* randFileName){
+CPU::CPU(char* inputFileName, char* randFileName, char* schedulerSpec){
   good = true;
   inFile = new ifstream(inputFileName);
   randFile = new ifstream(randFileName);
@@ -26,6 +58,8 @@ CPU::CPU(char* inputFileName, char* randFileName){
     error += "Invalid rand file\n";
   }
   randGen = new RandomNumberGenerator(*(randFile));
+
+  curScheduler = getScheduler(schedulerSpec);
 }
 
 void CPU::populateEventQueue(){

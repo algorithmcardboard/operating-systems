@@ -39,7 +39,7 @@ int main(int argc, char** argv){
   inputFileName = argv[optind];
   randFileName = argv[optind+1];
 
-  CPU myCpu(inputFileName, randFileName);
+  CPU myCpu(inputFileName, randFileName, schedulerSpec);
   if(myCpu.isGood()){
     myCpu.start();
   }else{

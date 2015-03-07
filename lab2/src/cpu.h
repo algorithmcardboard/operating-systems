@@ -1,6 +1,7 @@
 #include <fstream>
 #include <string>
 #include <iostream>
+#include<stdlib.h>
 
 #include <queue>
 #include <vector>
@@ -11,6 +12,11 @@
 #include "ds/processtable.h"
 #include "ds/event.h"
 #include "util/randomnumbergenerator.cpp"
+#include "scheduler/fcfs.cpp"
+#include "scheduler/lcfs.cpp"
+#include "scheduler/sjf.cpp"
+#include "scheduler/priority.cpp"
+#include "scheduler/round_robin.cpp"
 
 using namespace std;
 
@@ -20,6 +26,7 @@ class CPU{
     string error;
     ifstream *inFile, *randFile;
     RandomNumberGenerator* randGen;
+    Scheduler* curScheduler;
 
     struct EventComparator{
       bool operator()(const Event* event1, const Event* event2){
@@ -33,8 +40,10 @@ class CPU{
 
     void populateEventQueue();
 
+    Scheduler* getScheduler(char*);
+
   public:
-    CPU(char*, char* );
+    CPU(char*, char*, char*);
     ~CPU();
 
     bool isGood();

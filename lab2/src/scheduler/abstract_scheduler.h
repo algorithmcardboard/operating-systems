@@ -2,6 +2,7 @@
 #define SCHEDULER_H
 
 #include <limits.h>
+#include "../ds/process.h"
 #include <iostream>
 
 using namespace std;
@@ -17,6 +18,9 @@ class Scheduler{
     Scheduler(int quantum){
       this->quantum = quantum;
     }
+
+    virtual void addProcess(Process*) = 0;
+    virtual Process* get_next_process() = 0;
 };
 
 #endif

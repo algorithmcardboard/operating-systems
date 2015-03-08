@@ -104,9 +104,12 @@ void CPU::start(){
     for(pos = eventsAtT.begin(); pos != eventsAtT.end(); pos++){
       Event eve = **pos;
       Event::Transition eventTransition =  eve.getTransition();
+      Process* p;
       switch(eventTransition){
         case Event::T_CREATE:
           //Initialize process parameters such as priority and push it to scheduler
+          p = ProcessTable::getInstance().getProcess(eve.getPID());
+          //curScheduler->addProcess(p);
           break;
         case Event::T_RUN:
           break;

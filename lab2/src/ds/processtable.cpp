@@ -6,9 +6,13 @@ ProcessTable& ProcessTable::getInstance(){
 }
 
 ProcessTable::ProcessTable(){ 
-  this->table = new map<int, Process>();
+  this->table = new map<int, Process*>();
 }
 
 void ProcessTable::push(Process* newProcess){
-  table->insert(pair<int, Process>(newProcess->getPID(), *(newProcess)));
+  table->insert(pair<int, Process*>(newProcess->getPID(), newProcess));
+}
+
+Process* ProcessTable::getProcess(int pid){
+  return table->at(pid);
 }

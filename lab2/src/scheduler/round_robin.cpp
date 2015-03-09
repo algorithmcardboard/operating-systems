@@ -16,6 +16,7 @@ class RoundRobin : public Scheduler{
     }
 
     void addProcess(Process* p){
+      p->resetDynamicPriority();
       runQueue->push(p);
     };
 

@@ -1,4 +1,5 @@
 #include<iostream>
+#include<string>
 #include"processstate.h"
 
 using namespace std;
@@ -21,6 +22,7 @@ class Event{
     ProcessState getOldState() const;
     ProcessState getNewState() const;
     Transition getTransition() const;
+    const char* getTransitionLogString();
 
     friend ostream& operator<< (ostream &out, Event &eve);
 
@@ -30,4 +32,5 @@ class Event{
     ProcessState oldState, newState;
     Transition transition;
     Transition figureOutTransition();
+    string getTransitionString(ProcessState);
 };

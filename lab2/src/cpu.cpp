@@ -93,23 +93,18 @@ void CPU::start(){
   unsigned int time = 0;
 
   while(!eventQueue.empty()){
-    list<Event*> eventsAtT;
     time = eventQueue.top()->getTimestamp();
-    cout << endl << "about to enter loop"<< endl;
     while(!eventQueue.empty() && eventQueue.top()->getTimestamp() == time){
-      eventsAtT.push_back(eventQueue.top());
-      eventQueue.pop();
-    }
-    list<Event*>::iterator pos;
-    for(pos = eventsAtT.begin(); pos != eventsAtT.end(); pos++){
-      Event eve = **pos;
-      Event::Transition eventTransition =  eve.getTransition();
-      Process* p;
+      Event* eve = eventQueue.top();
+      cout << "Getting events at time "<< time << " " << *(eve) << endl;
+
+      Event::Transition eventTransition =  eve->getTransition();
+      cout << "Got the transition " << endl;
+      Process* p = ProcessTable::getInstance().getProcess(eve->getPID());
       switch(eventTransition){
         case Event::T_CREATE:
           //Initialize process parameters such as priority and push it to scheduler
-          p = ProcessTable::getInstance().getProcess(eve.getPID());
-          //curScheduler->addProcess(p);
+          curScheduler->addProcess(p);
           break;
         case Event::T_RUN:
           break;
@@ -122,7 +117,9 @@ void CPU::start(){
         case Event::T_TERMINATE:
           break;
       }
-      cout << eve;
+      eventQueue.pop();
+      delete eve;
     }
+    cout << "Event queue end" << endl;
   }
 }

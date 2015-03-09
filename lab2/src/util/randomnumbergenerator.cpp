@@ -29,11 +29,16 @@ class RandomNumberGenerator{
       delete seed;
     }
 
+    /*
     void printSeed(){
       cout << size << endl;
       for(int i = 0; i < size; i++){
         cout << *(seed + i) << endl;
       }
+    }*/
+
+    int getBurstCycle(int seedValue){
+      return myrandom(seedValue);
     }
 
     int getStaticPriority(){

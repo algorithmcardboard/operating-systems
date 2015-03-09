@@ -8,14 +8,14 @@ class Event{
   public:
     enum Transition{
       T_CREATE=1,
-      T_RUN,
-      T_BLOCK,
-      T_UNBLOCK,
-      T_PREEMPT,
-      T_TERMINATE
+      T_RUN = 2,
+      T_BLOCK = 3,
+      T_UNBLOCK = 4,
+      T_PREEMPT = 5,
+      T_TERMINATE = 6
     };
 
-    Event(int, int, ProcessState, ProcessState);
+    Event(int ts, int pid, ProcessState, ProcessState);
     int getTimestamp() const;
     int getSequenceNumber() const;
     int getPID() const;
@@ -28,7 +28,9 @@ class Event{
 
   private:
     static unsigned int sequence;
+
     int timestamp, seqNum, pid;
+
     ProcessState oldState, newState;
     Transition transition;
     Transition figureOutTransition();

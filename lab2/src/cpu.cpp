@@ -12,8 +12,7 @@ CPU::~CPU(){
 
 Scheduler* CPU::getScheduler(char* schedulerSpec){
   Scheduler* scheduler;
-  int quantum;
-  cout << "Scheduler is "<< schedulerSpec << endl;
+  quantum;
   char ch = schedulerSpec[0];
   switch(ch){
     case 'F':
@@ -28,13 +27,11 @@ Scheduler* CPU::getScheduler(char* schedulerSpec){
     case 'P':
       schedulerSpec++;
       quantum = atoi(schedulerSpec);
-      cout << "Quantum is "<< quantum << endl;
       scheduler = new PriorityScheduler(quantum);
       break;
     case 'R':
       schedulerSpec++;
       quantum = atoi(schedulerSpec);
-      cout << "Quantum is "<< quantum << endl;
       scheduler = new RoundRobin(quantum);
       break;
     default:
@@ -88,7 +85,6 @@ string CPU::getError(){
 void CPU::start(){
   populateEventQueue();
 
-  //randGen->printSeed();
 
   unsigned int time = 0;
 
@@ -96,30 +92,72 @@ void CPU::start(){
     time = eventQueue.top()->getTimestamp();
     while(!eventQueue.empty() && eventQueue.top()->getTimestamp() == time){
       Event* eve = eventQueue.top();
-      cout << "Getting events at time "<< time << " " << *(eve) << endl;
+      eventQueue.pop();
 
       Event::Transition eventTransition =  eve->getTransition();
-      cout << "Got the transition " << endl;
       Process* p = ProcessTable::getInstance().getProcess(eve->getPID());
+
+      cout << time << " " << p->getPID()<< " " << time - p->getLastTransitionTime() << ": ";
+      cout << eve->getTransitionLogString();
+
+      ProcessState endState;
+      int cpuBurst = 0, ioBurst = 0;
       switch(eventTransition){
+
         case Event::T_CREATE:
-          //Initialize process parameters such as priority and push it to scheduler
           curScheduler->addProcess(p);
           break;
+
         case Event::T_RUN:
+          endState = BLOCKED;
+          cpuBurst = p->getRemainingCpuBurst();
+          if(cpuBurst <= 0){
+            cpuBurst = randGen->getBurstCycle(p->getCpuBurst());
+            if(cpuBurst >= p->getRemainingTime()){
+              cpuBurst = p->getRemainingTime();
+              endState = TERMINATED;
+            }
+          }
+          if(cpuBurst > quantum){
+            endState= READY;
+          }
+
+          cout << " cb=" << cpuBurst << " rem="<<p->getRemainingTime() << " prio="<<p->getDynamicPriority();
+          eventQueue.push(new Event(time+cpuBurst, p->getPID(), RUNNING, endState));
+          p->reduceRemainingTime(cpuBurst);
+          p->reduceDynamicPriority();
           break;
+
         case Event::T_BLOCK:
+          p->resetDynamicPriority();
+          ioBurst = randGen->getBurstCycle(p->getIOBurst());
+          cout << " ib="<<ioBurst<< " rem="<<p->getRemainingTime();
+          eventQueue.push(new Event(time+ioBurst, p->getPID(), BLOCKED, READY));
           break;
+
         case Event::T_UNBLOCK:
+          curScheduler->addProcess(p);
           break;
+
         case Event::T_PREEMPT:
+          endState = READY;
+          eventQueue.push(new Event(time+cpuBurst, p->getPID(), RUNNING, endState));
+          curScheduler->addProcess(p);
           break;
+
         case Event::T_TERMINATE:
           break;
+
+        default:
+          cout << "in default transition.  Some error "<< eventTransition << endl;
       }
-      eventQueue.pop();
+      cout << endl;
+      p->setLastTransitionTime(time);
       delete eve;
     }
-    cout << "Event queue end" << endl;
+    Process* runP = curScheduler->get_next_process();
+    if(runP != NULL){
+      eventQueue.push(new Event(time, runP->getPID(), READY, RUNNING));
+    }
   }
 }

@@ -27,6 +27,7 @@ class CPU{
     ifstream *inFile, *randFile;
     RandomNumberGenerator* randGen;
     Scheduler* curScheduler;
+    int quantum;
 
     struct EventComparator{
       bool operator()(const Event* event1, const Event* event2){

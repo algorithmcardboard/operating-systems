@@ -18,6 +18,7 @@ Event::Transition Event::figureOutTransition(){
   }else if(oldState == BLOCKED && newState == READY){
     transition = T_UNBLOCK;
   }
+  return transition;
 }
 
 Event::Event(int timestamp, int pid, ProcessState oldState, ProcessState newState){
@@ -77,5 +78,5 @@ ostream& operator<< (ostream &out, Event &eve){
 }
 
 Event::Transition Event::getTransition() const{
-  return transition;
+  return this->transition;
 }

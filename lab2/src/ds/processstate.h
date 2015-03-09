@@ -5,7 +5,8 @@ enum ProcessState{
   CREATED=1,
   READY,
   RUNNING,
-  BLOCKED
+  BLOCKED,
+  TERMINATED
 };
 
 #endif

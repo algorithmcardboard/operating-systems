@@ -10,7 +10,7 @@ class Process{
     static unsigned int globalPID;
     int arrivalTime, totalCPUTime, cpuBurst, ioBurst, pid, static_priority, dynamic_priority;
     ProcessState currentState;
-    int remainingCPUBurst, remainingTime, lastTransitionTime;
+    int remainingCPUBurst, remainingTime, lastTransitionTime, ioTime, cpuWaitTime;
 
   public:
     Process(int arrivalTime, int totalCPUTime, int cpuBurst, int ioBurst, int static_priority);
@@ -26,9 +26,22 @@ class Process{
     void reduceDynamicPriority();
     void resetDynamicPriority();
     int getDynamicPriority();
+    int getStaticPriority();
 
     int getLastTransitionTime();
     void setLastTransitionTime(int);
+
+    void addIOBurst(int);
+    int getIOTime();
+
+    int getArrivalTime();
+    int getTotalCPUTime();
+
+    void addCPUWaitTime(int);
+    int getCpuWaitingTime();
+
+    int getTurnaroundTime();
+
 };
 
 #endif

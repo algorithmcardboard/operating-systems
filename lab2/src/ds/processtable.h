@@ -13,4 +13,7 @@ class ProcessTable{
     static ProcessTable& getInstance();
     void push(Process*);
     Process* getProcess(int pid);
+
+    void printPerProocessSummary();
+    void printSummary();
 };

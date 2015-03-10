@@ -13,6 +13,8 @@ Process::Process(int arrivalTime, int totalCPUTime, int cpuBurst, int ioBurst, i
   this->currentState = CREATED;
   this->lastTransitionTime = arrivalTime;
   this->remainingTime = totalCPUTime;
+  this->ioTime = 0;
+  this->cpuWaitTime = 0;
 }
 
 int Process::getPID(){
@@ -63,10 +65,42 @@ int Process::getDynamicPriority(){
   return dynamic_priority;
 }
 
+int Process::getStaticPriority(){
+  return static_priority;
+}
+
 int Process::getLastTransitionTime(){
   return lastTransitionTime;
 }
 
 void Process::setLastTransitionTime(int time){
   lastTransitionTime = time;
+}
+
+void Process::addIOBurst(int iob){
+  ioTime += iob;
+}
+
+int Process::getIOTime(){
+  return ioTime;
+}
+
+int Process::getArrivalTime(){
+  return arrivalTime;
+}
+
+int Process::getTotalCPUTime(){
+  return totalCPUTime;
+}
+
+void Process::addCPUWaitTime(int time){
+  cpuWaitTime += time;
+}
+
+int Process::getCpuWaitingTime(){
+  return cpuWaitTime;
+}
+
+int Process::getTurnaroundTime(){
+  return lastTransitionTime - arrivalTime;
 }

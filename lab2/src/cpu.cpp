@@ -99,8 +99,9 @@ void CPU::start(){
 
       Event::Transition eventTransition =  eve->getTransition();
       Process* p = ProcessTable::getInstance().getProcess(eve->getPID());
+      int lastTransitionTime = p->getLastTransitionTime();
 
-      cout << time << " " << p->getPID()<< " " << time - p->getLastTransitionTime() << ": ";
+      cout << time << " " << p->getPID()<< " " << time - lastTransitionTime << ": ";
       if(eventTransition != Event::T_TERMINATE){
         cout << eve->getTransitionLogString() << " ";
       }
@@ -136,6 +137,7 @@ void CPU::start(){
           eventQueue.push(new Event(time+eventDelta, p->getPID(), RUNNING, endState));
           p->reduceRemainingTime(eventDelta);
           p->reduceDynamicPriority();
+          p->addCPUWaitTime(time-lastTransitionTime);
           runningProcessEndTime = eventDelta;
           cpuFreeTime = time+eventDelta;
           break;
@@ -144,6 +146,7 @@ void CPU::start(){
           p->setRemainingCpuBurst(0);
           p->resetDynamicPriority();
           ioBurst = randGen->getBurstCycle(p->getIOBurst());
+          p->addIOBurst(ioBurst);
           cout << " ib="<<ioBurst<< " rem="<<p->getRemainingTime();
           eventQueue.push(new Event(time+ioBurst, p->getPID(), BLOCKED, READY));
           break;
@@ -184,4 +187,6 @@ void CPU::start(){
     }
   }
   cout << curScheduler->getName() << endl;
+  ProcessTable::getInstance().printPerProocessSummary();
+  ProcessTable::getInstance().printSummary();
 }

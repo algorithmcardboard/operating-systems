@@ -9,7 +9,6 @@ class ProcessTable{
     static unsigned int globalPID;
     ProcessTable();
 
-    double lastFinishingTime, cpuUtil, ioUtil, averageTurnAround, averageWaitTime, totalThroughput;
 
   public:
     static ProcessTable& getInstance();

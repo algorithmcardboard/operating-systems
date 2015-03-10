@@ -32,6 +32,6 @@
 linker
 .nfs*
 
-lab2/src/bin/scheduler
+lab2/bin
 
 testinput

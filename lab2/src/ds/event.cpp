@@ -14,6 +14,8 @@ Event::Transition Event::figureOutTransition(){
       transition = T_BLOCK;
     }else if(newState == READY){
       transition = T_PREEMPT;
+    }else if(newState == TERMINATED){
+      transition = T_TERMINATE;
     }
   }else if(oldState == BLOCKED && newState == READY){
     transition = T_UNBLOCK;

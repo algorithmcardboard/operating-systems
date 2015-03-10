@@ -21,8 +21,13 @@ class RoundRobin : public Scheduler{
     };
 
     Process* get_next_process(){
+      if(runQueue->size() <= 0){
+        return NULL;
+      }
       Process* p = runQueue->front();
-      runQueue->pop();
+      if(p != NULL){
+        runQueue->pop();
+      }
       return p;
     }
 };

@@ -90,6 +90,7 @@ void CPU::start(){
 
   while(!eventQueue.empty()){
     time = eventQueue.top()->getTimestamp();
+    int runningProcessEndTime= 0;
     while(!eventQueue.empty() && eventQueue.top()->getTimestamp() == time){
       Event* eve = eventQueue.top();
       eventQueue.pop();
@@ -98,7 +99,9 @@ void CPU::start(){
       Process* p = ProcessTable::getInstance().getProcess(eve->getPID());
 
       cout << time << " " << p->getPID()<< " " << time - p->getLastTransitionTime() << ": ";
-      cout << eve->getTransitionLogString();
+      if(eventTransition != Event::T_TERMINATE){
+        cout << eve->getTransitionLogString() << " ";
+      }
 
       ProcessState endState;
       int cpuBurst = 0, ioBurst = 0, eventDelta = 0, lastCPUBurst = 0;
@@ -111,13 +114,10 @@ void CPU::start(){
         case Event::T_RUN:
           endState = BLOCKED;
           cpuBurst = p->getRemainingCpuBurst();
-          //cout << endl << "having remaining cpu burst " << cpuBurst << endl;
           if(cpuBurst <= 0){
-            //cout << endl << "Calculating new cpu burst"<< endl;
             cpuBurst = randGen->getBurstCycle(p->getCpuBurst());
             if(cpuBurst >= p->getRemainingTime()){
               cpuBurst = p->getRemainingTime();
-              endState = TERMINATED;
             }
             p->setRemainingCpuBurst(cpuBurst);
           }
@@ -126,11 +126,15 @@ void CPU::start(){
             endState= READY;
             eventDelta = quantum;
           }
+          if(p->getRemainingTime() == eventDelta){
+            endState = TERMINATED;
+          }
 
-          cout << " cb=" << cpuBurst << " rem="<<p->getRemainingTime() << " prio="<<p->getDynamicPriority();
+          cout << "cb=" << cpuBurst << " rem="<<p->getRemainingTime() << " prio="<<p->getDynamicPriority();
           eventQueue.push(new Event(time+eventDelta, p->getPID(), RUNNING, endState));
           p->reduceRemainingTime(eventDelta);
           p->reduceDynamicPriority();
+          runningProcessEndTime = eventDelta;
           break;
 
         case Event::T_BLOCK:
@@ -144,19 +148,20 @@ void CPU::start(){
         case Event::T_UNBLOCK:
           endState = RUNNING;
           curScheduler->addProcess(p);
-          eventQueue.push(new Event(time, p->getPID(), READY, endState));
+          //eventQueue.push(new Event(time, p->getPID(), READY, endState));
           break;
 
         case Event::T_PREEMPT:
           endState = RUNNING;
           lastCPUBurst = p->getRemainingCpuBurst();
           p->setRemainingCpuBurst(lastCPUBurst - quantum);
-          eventQueue.push(new Event(time, p->getPID(), READY, endState));
+          //eventQueue.push(new Event(time+runningProcessEndTime, p->getPID(), READY, endState));
           curScheduler->addProcess(p);
-          cout << " cb=" << p->getRemainingCpuBurst() << " rem="<<p->getRemainingTime() << " prio="<<p->getDynamicPriority();
+          cout << "cb=" << p->getRemainingCpuBurst() << " rem="<<p->getRemainingTime() << " prio="<<p->getDynamicPriority();
           break;
 
         case Event::T_TERMINATE:
+          cout << "Done";
           break;
 
         default:
@@ -168,7 +173,8 @@ void CPU::start(){
     }
     Process* runP = curScheduler->get_next_process();
     if(runP != NULL){
-      eventQueue.push(new Event(time, runP->getPID(), READY, RUNNING));
+      eventQueue.push(new Event(time+runningProcessEndTime, runP->getPID(), READY, RUNNING));
+    }else{
     }
   }
 }

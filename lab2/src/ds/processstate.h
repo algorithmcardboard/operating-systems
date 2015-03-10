@@ -3,10 +3,10 @@
 
 enum ProcessState{
   CREATED=1,
-  READY,
-  RUNNING,
-  BLOCKED,
-  TERMINATED
+  READY=2,
+  RUNNING=3,
+  BLOCKED=4,
+  TERMINATED=5
 };
 
 #endif

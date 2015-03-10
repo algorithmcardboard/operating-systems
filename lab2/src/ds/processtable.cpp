@@ -1,4 +1,7 @@
 #include "processtable.h" 
+#include <iostream>
+
+using namespace std;
 
 ProcessTable& ProcessTable::getInstance(){
   static ProcessTable instance;

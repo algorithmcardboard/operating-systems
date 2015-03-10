@@ -54,9 +54,9 @@ void ProcessTable::printSummary(){
     sumTurnAroundTime += p->getTurnaroundTime();
     sumWaitTime += p->getCpuWaitingTime();
   }
-  averageTurnAround = sumTurnAroundTime/table->size();
-  averageWaitTime = sumWaitTime/table->size();
-  totalThroughput = (double)table->size()/(double)lastFinishingTime/100;
+  averageTurnAround = (double)sumTurnAroundTime/(double)table->size();
+  averageWaitTime = (double)sumWaitTime/(double)table->size();
+  totalThroughput = (double)table->size()/((double)lastFinishingTime/100);
 
   printf("SUM: %d %.2lf %.2lf %.2lf %.2lf %.3lf\n",
         lastFinishingTime,

@@ -86,7 +86,7 @@ void CPU::start(){
   populateEventQueue();
 
 
-  unsigned int time = 0;
+  unsigned int time = 0, cpuFreeTime = 0;
 
   while(!eventQueue.empty()){
     time = eventQueue.top()->getTimestamp();
@@ -135,6 +135,7 @@ void CPU::start(){
           p->reduceRemainingTime(eventDelta);
           p->reduceDynamicPriority();
           runningProcessEndTime = eventDelta;
+          cpuFreeTime = time+eventDelta;
           break;
 
         case Event::T_BLOCK:
@@ -171,7 +172,10 @@ void CPU::start(){
       p->setLastTransitionTime(time);
       delete eve;
     }
-    Process* runP = curScheduler->get_next_process();
+    Process* runP = NULL;
+    if(time >= cpuFreeTime){
+      runP = curScheduler->get_next_process();
+    }
     if(runP != NULL){
       eventQueue.push(new Event(time+runningProcessEndTime, runP->getPID(), READY, RUNNING));
     }else{

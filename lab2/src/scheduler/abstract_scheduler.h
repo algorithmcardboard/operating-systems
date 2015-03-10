@@ -19,6 +19,10 @@ class Scheduler{
       this->quantum = quantum;
     }
 
+    int getQuantum(){
+      return quantum;
+    }
+
     virtual void addProcess(Process*) = 0;
     virtual Process* get_next_process() = 0;
 };

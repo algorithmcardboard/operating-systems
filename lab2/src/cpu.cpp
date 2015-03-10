@@ -12,7 +12,7 @@ CPU::~CPU(){
 
 Scheduler* CPU::getScheduler(char* schedulerSpec){
   Scheduler* scheduler;
-  quantum;
+  int q;
   char ch = schedulerSpec[0];
   switch(ch){
     case 'F':
@@ -26,17 +26,18 @@ Scheduler* CPU::getScheduler(char* schedulerSpec){
       break;
     case 'P':
       schedulerSpec++;
-      quantum = atoi(schedulerSpec);
-      scheduler = new PriorityScheduler(quantum);
+      q= atoi(schedulerSpec);
+      scheduler = new PriorityScheduler(q);
       break;
     case 'R':
       schedulerSpec++;
-      quantum = atoi(schedulerSpec);
-      scheduler = new RoundRobin(quantum);
+      q= atoi(schedulerSpec);
+      scheduler = new RoundRobin(q);
       break;
     default:
       return NULL;
   }
+  return scheduler;
 }
 
 // Constructor 
@@ -57,6 +58,7 @@ CPU::CPU(char* inputFileName, char* randFileName, char* schedulerSpec){
   randGen = new RandomNumberGenerator(*(randFile));
 
   curScheduler = getScheduler(schedulerSpec);
+  quantum = curScheduler->getQuantum();
 }
 
 void CPU::populateEventQueue(){

@@ -28,6 +28,7 @@ class CPU{
     RandomNumberGenerator* randGen;
     Scheduler* curScheduler;
     int quantum;
+    bool verbose;
 
     struct EventComparator{
       bool operator()(const Event* event1, const Event* event2){
@@ -44,7 +45,7 @@ class CPU{
     Scheduler* getScheduler(char*);
 
   public:
-    CPU(char*, char*, char*);
+    CPU(char*, char*, char*, bool);
     ~CPU();
 
     bool isGood();

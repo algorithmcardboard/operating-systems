@@ -41,7 +41,7 @@ Scheduler* CPU::getScheduler(char* schedulerSpec){
 }
 
 // Constructor 
-CPU::CPU(char* inputFileName, char* randFileName, char* schedulerSpec){
+CPU::CPU(char* inputFileName, char* randFileName, char* schedulerSpec, bool verbose){
   good = true;
   inFile = new ifstream(inputFileName);
   randFile = new ifstream(randFileName);
@@ -59,6 +59,7 @@ CPU::CPU(char* inputFileName, char* randFileName, char* schedulerSpec){
 
   curScheduler = getScheduler(schedulerSpec);
   quantum = curScheduler->getQuantum();
+  this->verbose  = verbose;
 }
 
 void CPU::populateEventQueue(){
@@ -101,9 +102,11 @@ void CPU::start(){
       Process* p = ProcessTable::getInstance().getProcess(eve->getPID());
       int lastTransitionTime = p->getLastTransitionTime();
 
-      cout << time << " " << p->getPID()<< " " << time - lastTransitionTime << ": ";
-      if(eventTransition != Event::T_TERMINATE){
-        cout << eve->getTransitionLogString() << " ";
+      if(verbose){
+        cout << time << " " << p->getPID()<< " " << time - lastTransitionTime << ": ";
+        if(eventTransition != Event::T_TERMINATE){
+          cout << eve->getTransitionLogString() << " ";
+        }
       }
 
       ProcessState endState;
@@ -133,7 +136,9 @@ void CPU::start(){
             endState = TERMINATED;
           }
 
-          cout << "cb=" << cpuBurst << " rem="<<p->getRemainingTime() << " prio="<<p->getDynamicPriority();
+          if(verbose){
+            cout << "cb=" << cpuBurst << " rem="<<p->getRemainingTime() << " prio="<<p->getDynamicPriority();
+          }
           eventQueue.push(new Event(time+eventDelta, p->getPID(), RUNNING, endState));
           p->reduceRemainingTime(eventDelta);
           p->reduceDynamicPriority();
@@ -147,7 +152,9 @@ void CPU::start(){
           p->resetDynamicPriority();
           ioBurst = randGen->getBurstCycle(p->getIOBurst());
           p->addIOBurst(ioBurst);
-          cout << " ib="<<ioBurst<< " rem="<<p->getRemainingTime();
+          if(verbose){
+            cout << " ib="<<ioBurst<< " rem="<<p->getRemainingTime();
+          }
           eventQueue.push(new Event(time+ioBurst, p->getPID(), BLOCKED, READY));
           break;
 
@@ -163,17 +170,23 @@ void CPU::start(){
           p->setRemainingCpuBurst(lastCPUBurst - quantum);
           //eventQueue.push(new Event(time+runningProcessEndTime, p->getPID(), READY, endState));
           curScheduler->addProcess(p);
-          cout << "cb=" << p->getRemainingCpuBurst() << " rem="<<p->getRemainingTime() << " prio="<<p->getDynamicPriority();
+          if(verbose){
+            cout << "cb=" << p->getRemainingCpuBurst() << " rem="<<p->getRemainingTime() << " prio="<<p->getDynamicPriority();
+          }
           break;
 
         case Event::T_TERMINATE:
-          cout << "Done";
+          if(verbose){
+            cout << "Done";
+          }
           break;
 
         default:
           cout << "in default transition.  Some error "<< eventTransition << endl;
       }
-      cout << endl;
+      if(verbose){
+        cout << endl;
+      }
       p->setLastTransitionTime(time);
       delete eve;
     }

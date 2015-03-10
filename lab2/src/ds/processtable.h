@@ -7,6 +7,7 @@ class ProcessTable{
   private:
     map<int, Process*>* table;
     static unsigned int globalPID;
+    int totalIOTime;
     ProcessTable();
 
 
@@ -17,4 +18,6 @@ class ProcessTable{
 
     void printPerProocessSummary();
     void printSummary();
+
+    void setTotalIOUtil(int);
 };

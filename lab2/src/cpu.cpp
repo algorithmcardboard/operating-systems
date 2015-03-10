@@ -89,6 +89,7 @@ void CPU::start(){
   populateEventQueue();
 
 
+  int ioInProgress = 0, iobStart = 0, totalIOTime = 0;
   unsigned int time = 0, cpuFreeTime = 0;
 
   while(!eventQueue.empty()){
@@ -148,6 +149,7 @@ void CPU::start(){
           break;
 
         case Event::T_BLOCK:
+          ioInProgress++;
           p->setRemainingCpuBurst(0);
           p->resetDynamicPriority();
           ioBurst = randGen->getBurstCycle(p->getIOBurst());
@@ -155,10 +157,17 @@ void CPU::start(){
           if(verbose){
             cout << " ib="<<ioBurst<< " rem="<<p->getRemainingTime();
           }
+          if(ioInProgress == 1){
+            iobStart = time;
+          }
           eventQueue.push(new Event(time+ioBurst, p->getPID(), BLOCKED, READY));
           break;
 
         case Event::T_UNBLOCK:
+          ioInProgress--;
+          if(ioInProgress == 0){
+            totalIOTime += time - iobStart;
+          }
           endState = RUNNING;
           curScheduler->addProcess(p);
           //eventQueue.push(new Event(time, p->getPID(), READY, endState));
@@ -200,6 +209,7 @@ void CPU::start(){
     }
   }
   cout << curScheduler->getName() << endl;
+  ProcessTable::getInstance().setTotalIOUtil(totalIOTime);
   ProcessTable::getInstance().printPerProocessSummary();
   ProcessTable::getInstance().printSummary();
 }

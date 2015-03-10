@@ -42,7 +42,7 @@ void ProcessTable::printPerProocessSummary(){
 
 void ProcessTable::printSummary(){
   int lastFinishingTime = 0;
-  double cpuUtil, ioUtil, averageTurnAround, averageWaitTime, totalThroughput;
+  double cpuUtil, averageTurnAround, averageWaitTime, totalThroughput;
   int sumTurnAroundTime = 0, sumWaitTime = 0;
   for(map<int, Process*>::iterator ci = table->begin(); ci != table->end(); ci++){
     Process* p = ci->second;
@@ -50,7 +50,6 @@ void ProcessTable::printSummary(){
       lastFinishingTime = p->getLastTransitionTime();
     }
     cpuUtil += p->getTotalCPUTime();
-    ioUtil += p->getIOTime();
     sumTurnAroundTime += p->getTurnaroundTime();
     sumWaitTime += p->getCpuWaitingTime();
   }
@@ -61,8 +60,12 @@ void ProcessTable::printSummary(){
   printf("SUM: %d %.2lf %.2lf %.2lf %.2lf %.3lf\n",
         lastFinishingTime,
         ((double)cpuUtil/lastFinishingTime)*100,
-        ((double)ioUtil/lastFinishingTime)*100,
+        ((double)totalIOTime/lastFinishingTime)*100,
         averageTurnAround,
         averageWaitTime,
         totalThroughput);
+}
+
+void ProcessTable::setTotalIOUtil(int ioUtil){
+  this->totalIOTime = ioUtil;
 }

@@ -1,4 +1,4 @@
-#Linker - Lab1
+#Scheduler - Lab2
 
 **Author** Anirudhan Jegannathan Rajagopalan
 

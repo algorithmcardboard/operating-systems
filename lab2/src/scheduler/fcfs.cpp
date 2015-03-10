@@ -28,4 +28,8 @@ class FCFS : public Scheduler{
       }
       return p;
     }
+
+    string getName(){
+      return "FCFS";
+    }
 };

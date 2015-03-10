@@ -1,4 +1,5 @@
 #include "abstract_scheduler.h"
+#include <sstream>
 
 #include <queue>
 
@@ -7,12 +8,17 @@ using namespace std;
 class RoundRobin : public Scheduler{
   private:
     queue<Process*>* runQueue;
+    string name;
   public:
     RoundRobin():Scheduler(){
       runQueue = new queue<Process*>();
+      name = "RR";
     }
     RoundRobin(int a):Scheduler(a){
       runQueue = new queue<Process*>();
+      stringstream s;
+      s << "RR " << quantum;
+      name = s.str();
     }
 
     void addProcess(Process* p){
@@ -29,5 +35,9 @@ class RoundRobin : public Scheduler{
         runQueue->pop();
       }
       return p;
+    }
+
+    string getName(){
+      return name;
     }
 };

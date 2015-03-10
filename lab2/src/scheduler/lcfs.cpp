@@ -28,4 +28,8 @@ class LCFS : public Scheduler{
       }
       return p;
     }
+
+    string getName(){
+      return "FCFS";
+    }
 };

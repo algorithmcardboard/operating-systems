@@ -12,4 +12,8 @@ class SJF : public Scheduler{
     Process* get_next_process(){
       return NULL;
     }
+
+    string getName(){
+      return "FCFS";
+    }
 };

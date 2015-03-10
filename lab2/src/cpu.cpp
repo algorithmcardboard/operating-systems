@@ -183,4 +183,5 @@ void CPU::start(){
     }else{
     }
   }
+  cout << curScheduler->getName() << endl;
 }

@@ -1,6 +1,6 @@
 CC=g++
 CFLAGS=-I
-BINDIR=bin
+BINDIR=../bin
 
 compile: init.cpp cpu.o event.o process.o processtable.o prio.o fcfs.o lcfs.o roundrobin.o sjf.o
 	$(CC) -o $(BINDIR)/scheduler init.cpp $(BINDIR)/cpu.o $(BINDIR)/event.o $(BINDIR)/process.o $(BINDIR)/processtable.o $(BINDIR)/prio.o $(BINDIR)/fcfs.o $(BINDIR)/lcfs.o $(BINDIR)/roundrobin.o $(BINDIR)/sjf.o
@@ -41,7 +41,7 @@ processtable.o: ds/processtable.cpp ds/processtable.h process.o processstate.o
 
 
 setup:
-	mkdir bin
+	mkdir ../bin
 
 
 .PHONY : clean

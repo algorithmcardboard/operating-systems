@@ -46,4 +46,4 @@ setup:
 
 .PHONY : clean
 clean:
-	-rm bin/scheduler bin/*.o
+	-rm $(BINDIR)/scheduler $(BINDIR)/*.o

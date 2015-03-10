@@ -30,6 +30,6 @@ class LCFS : public Scheduler{
     }
 
     string getName(){
-      return "FCFS";
+      return "LCFS";
     }
 };

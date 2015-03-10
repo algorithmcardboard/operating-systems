@@ -15,7 +15,6 @@ class PriorityScheduler : public Scheduler{
     }
 
     void addProcess(Process* p){
-      cout << "In add process flow";
     };
 
     Process* get_next_process(){

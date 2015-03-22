@@ -106,7 +106,7 @@ void CPU::start(){
       if(verbose){
         cout << time << " " << p->getPID()<< " " << time - lastTransitionTime << ": ";
         if(eventTransition != Event::T_TERMINATE){
-          cout << eve->getTransitionLogString() << " ";
+          cout << eve->getTransitionLogString();
         }
       }
 
@@ -138,7 +138,7 @@ void CPU::start(){
           }
 
           if(verbose){
-            cout << "cb=" << cpuBurst << " rem="<<p->getRemainingTime() << " prio="<<p->getDynamicPriority();
+            cout << " cb=" << cpuBurst << " rem="<<p->getRemainingTime() << " prio="<<p->getDynamicPriority();
           }
           eventQueue.push(new Event(time+eventDelta, p->getPID(), RUNNING, endState));
           p->reduceRemainingTime(eventDelta);
@@ -155,7 +155,7 @@ void CPU::start(){
           ioBurst = randGen->getBurstCycle(p->getIOBurst());
           p->addIOBurst(ioBurst);
           if(verbose){
-            cout << " ib="<<ioBurst<< " rem="<<p->getRemainingTime();
+            cout << "  ib="<<ioBurst<< " rem="<<p->getRemainingTime();
           }
           if(ioInProgress == 1){
             iobStart = time;
@@ -170,17 +170,15 @@ void CPU::start(){
           }
           endState = RUNNING;
           curScheduler->addProcess(p);
-          //eventQueue.push(new Event(time, p->getPID(), READY, endState));
           break;
 
         case Event::T_PREEMPT:
           endState = RUNNING;
           lastCPUBurst = p->getRemainingCpuBurst();
           p->setRemainingCpuBurst(lastCPUBurst - quantum);
-          //eventQueue.push(new Event(time+runningProcessEndTime, p->getPID(), READY, endState));
           curScheduler->addProcess(p);
           if(verbose){
-            cout << "cb=" << p->getRemainingCpuBurst() << " rem="<<p->getRemainingTime() << " prio="<<p->getDynamicPriority();
+            cout << "  cb=" << p->getRemainingCpuBurst() << " rem="<<p->getRemainingTime() << " prio="<<p->getDynamicPriority();
           }
           break;
 

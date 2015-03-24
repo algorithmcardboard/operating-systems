@@ -10,7 +10,7 @@ class Process{
     static unsigned int globalPID;
     int arrivalTime, totalCPUTime, cpuBurst, ioBurst, pid, static_priority, dynamic_priority;
     ProcessState currentState;
-    int remainingCPUBurst, remainingTime, lastTransitionTime, ioTime, cpuWaitTime;
+    int remainingCPUBurst, remainingTime, lastTransitionTime, ioTime, cpuWaitTime, lastScheduledID;
 
   public:
     Process(int arrivalTime, int totalCPUTime, int cpuBurst, int ioBurst, int static_priority);
@@ -41,6 +41,9 @@ class Process{
     int getCpuWaitingTime();
 
     int getTurnaroundTime();
+
+    int getLastScheduledId();
+    void setLastScheduledId(int);
 
 };
 

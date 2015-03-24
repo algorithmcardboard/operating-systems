@@ -104,3 +104,11 @@ int Process::getCpuWaitingTime(){
 int Process::getTurnaroundTime(){
   return lastTransitionTime - arrivalTime;
 }
+
+void Process::setLastScheduledId(int scheduledID){
+  lastScheduledID = scheduledID;
+}
+
+int Process::getLastScheduledId(){
+  return lastScheduledID;
+}

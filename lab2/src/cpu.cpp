@@ -115,6 +115,7 @@ void CPU::start(){
       switch(eventTransition){
 
         case Event::T_CREATE:
+          p->setLastTransitionTime(time);
           curScheduler->addProcess(p);
           break;
 
@@ -169,6 +170,7 @@ void CPU::start(){
             totalIOTime += time - iobStart;
           }
           endState = RUNNING;
+          p->setLastTransitionTime(time);
           curScheduler->addProcess(p);
           break;
 
@@ -176,6 +178,7 @@ void CPU::start(){
           endState = RUNNING;
           lastCPUBurst = p->getRemainingCpuBurst();
           p->setRemainingCpuBurst(lastCPUBurst - quantum);
+          p->setLastTransitionTime(time);
           curScheduler->addProcess(p);
           if(verbose){
             cout << "  cb=" << p->getRemainingCpuBurst() << " rem="<<p->getRemainingTime() << " prio="<<p->getDynamicPriority();

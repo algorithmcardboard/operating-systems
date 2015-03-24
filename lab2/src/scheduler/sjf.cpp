@@ -3,6 +3,7 @@
 
 class SJF : public Scheduler{
   private:
+    unsigned int lastScheduledID;
     struct ProcessComparator{
       bool operator()(Process* p1, Process* p2){
         if(p1->getRemainingTime() != p2->getRemainingTime()){
@@ -11,18 +12,21 @@ class SJF : public Scheduler{
         if(p1->getLastTransitionTime() != p2->getLastTransitionTime()){
           return p1->getLastTransitionTime() > p2->getLastTransitionTime();
         }
-        return p1->getPID() > p2->getPID();
+        return p1->getLastScheduledId() > p2->getLastScheduledId();
       }
     };
     priority_queue<Process*, vector<Process*>, ProcessComparator> runQueue;
   public:
     SJF():Scheduler(){
+      lastScheduledID = 0;
     }
     SJF(int a):Scheduler(a){
+      lastScheduledID = 0;
     }
 
     void addProcess(Process* p){
       if(p != NULL){
+        p->setLastScheduledId(lastScheduledID++);
         runQueue.push(p);
       }
     };

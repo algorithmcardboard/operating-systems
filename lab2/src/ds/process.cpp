@@ -15,6 +15,7 @@ Process::Process(int arrivalTime, int totalCPUTime, int cpuBurst, int ioBurst, i
   this->remainingTime = totalCPUTime;
   this->ioTime = 0;
   this->cpuWaitTime = 0;
+  this->remainingCPUBurst = 0;
 }
 
 int Process::getPID(){

@@ -1,57 +1,63 @@
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
+#include <vector>
+#include <list>
+
+#include "ds/pte.h"
+#include "mmu.cpp"
+#include "pr_algos/abstract_pr.cpp"
 
 using namespace std;
 
-char* getMMUAlgo(char* algoStr, ifstream& fin){
+AbstractPR* getMMUAlgo(char* algoStr, ifstream& fin){
   char c = algoStr[0];
-  char* algo = NULL;
+  AbstractPR* algo = NULL;
   switch(c){
     case 'N':
       // NRU (four classes)
       // based on virtual pages
-      algo = (char*)"NRU (VP)";
+      //algo = (char*)"NRU (VP)";
       break;
     case 'X':
       // Clock
       // based on virtual pages
-      algo = (char*)"Clock (VP)";
+      //algo = (char*)"Clock (VP)";
       break;
     case 'Y':
       // Aging
       // based on virtual pages
-      algo = (char*)"Aging (VP)";
+      //algo = (char*)"Aging (VP)";
       break;
     case 'l':
       // LRU (Least Reently used)
       // based on physical frames
-      algo = (char*)"LRU (PF)";
+      //algo = (char*)"LRU (PF)";
       break;
     case 'r':
       // Random 
       // based on physical frames
-      algo = (char*)"Random (PF)";
+      //algo = (char*)"Random (PF)";
       break;
     case 'f':
       // FIFO
       // based on physical frames
-      algo = (char*)"FIFO (PF)";
+      //algo = (char*)"FIFO (PF)";
       break;
     case 's':
       // Second chance
       // based on physical frames
-      algo = (char*)"Second Chance (PF)";
+      //algo = (char*)"Second Chance (PF)";
       break;
     case 'c':
       // Clock
       // based on physical frames
-      algo = (char*)"Clock (PF)";
+      //algo = (char*)"Clock (PF)";
       break;
     case 'a':
       // Aging
       // based on physical frames
-      algo = (char*)"Aging (PF)";
+      //algo = (char*)"Aging (PF)";
       break;
     default:
       algo = NULL;
@@ -67,6 +73,10 @@ int main(int argc, char** argv){
   char* inputFileName = NULL;
   char* randFileName = NULL;
   int numFrames = 32;
+
+  vector<pte>* page_table = new vector<pte>(64);
+  vector<unsigned int>* frame_table;
+  list<unsigned int>* free_list;
 
   ifstream *inFile, *randFile;
 
@@ -109,7 +119,17 @@ int main(int argc, char** argv){
     exit(99);
   }
 
-  getMMUAlgo(mmuAlgoStr, *(randFile));
+  frame_table = new vector<unsigned int>(numFrames);
+  free_list = new list<unsigned int>();
+
+  for(int i = 0; i < numFrames; i++){
+    free_list->push_back(i);
+    frame_table->at(i) = i;
+  }
+
+  cout << frame_table->size() << endl << free_list->size() << endl;
+
+  AbstractPR* prAlgo = getMMUAlgo(mmuAlgoStr, *(randFile));
 
   cout << "Options are " << mmuAlgoStr << " " << options << " " << numFrames << " " << inputFileName << " " << randFileName << endl;
   return 0;

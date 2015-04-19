@@ -7,10 +7,11 @@
 #include "ds/pte.h"
 #include "mmu.cpp"
 #include "pr_algos/abstract_pr.cpp"
+#include "pr_algos/fifo.cpp"
 
 using namespace std;
 
-AbstractPR* getMMUAlgo(char* algoStr, ifstream& fin){
+AbstractPR* getMMUAlgo(char* algoStr, ifstream& fin, vector<pte>* pt, vector<unsigned int>* ft){
   char c = algoStr[0];
   AbstractPR* algo = NULL;
   switch(c){
@@ -42,7 +43,7 @@ AbstractPR* getMMUAlgo(char* algoStr, ifstream& fin){
     case 'f':
       // FIFO
       // based on physical frames
-      //algo = (char*)"FIFO (PF)";
+      algo = new FIFO(pt, ft);
       break;
     case 's':
       // Second chance
@@ -129,7 +130,9 @@ int main(int argc, char** argv){
 
   cout << frame_table->size() << endl << free_list->size() << endl;
 
-  AbstractPR* prAlgo = getMMUAlgo(mmuAlgoStr, *(randFile));
+  AbstractPR* prAlgo = getMMUAlgo(mmuAlgoStr, *(randFile), page_table, frame_table);
+
+  MMU mmu(page_table, frame_table, free_list, prAlgo);
 
   cout << "Options are " << mmuAlgoStr << " " << options << " " << numFrames << " " << inputFileName << " " << randFileName << endl;
   return 0;

@@ -1,3 +1,6 @@
+#ifndef PTE_H
+#define PTE_H
+
 struct pte{
   unsigned int present:1;
   unsigned int modified:1;
@@ -5,3 +8,5 @@ struct pte{
   unsigned int paged_out:1;
   unsigned int frameNumber:6;
 };
+
+#endif

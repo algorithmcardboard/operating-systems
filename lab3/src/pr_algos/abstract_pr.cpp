@@ -1,17 +1,22 @@
 #ifndef ABSTRACT_PR
 #define ABSTRACT_PR
 
+#include <vector>
+#include "../ds/pte.h"
+
 using namespace std;
 
 class AbstractPR{
   protected:
-    int page_table_size;
-    int frame_table_size;
+    vector<pte>* page_table;
+    vector<unsigned int>* frame_table;
+
   public:
-    AbstractPR(int pts, int fts){
-      this->page_table_size = pts;
-      this->frame_table_size = fts;
+    AbstractPR(vector<pte>* pt, vector<unsigned int>* ft){
+      this->page_table = pt;
+      this->frame_table = ft;
     }
+
     virtual int get_frame_to_replace() = 0;
 };
 

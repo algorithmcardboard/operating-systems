@@ -6,7 +6,7 @@ struct pte{
   unsigned int modified:1;
   unsigned int referenced:1;
   unsigned int paged_out:1;
-  unsigned int frameNumber:6;
+  unsigned int frame_number:6;
 };
 
 #endif

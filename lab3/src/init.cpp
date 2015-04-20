@@ -2,6 +2,7 @@
 #include <fstream>
 #include <stdlib.h>
 #include <vector>
+#include <string>
 #include <list>
 
 #include "ds/pte.h"
@@ -75,7 +76,14 @@ int main(int argc, char** argv){
   char* randFileName = NULL;
   int numFrames = 32;
 
-  vector<pte>* page_table = new vector<pte>(64);
+  vector<pte>* page_table = new vector<pte>();
+
+  static const struct pte EMPTY_PTE = {1, 0, 0, 0, 0};
+
+  for(int i = 0; i < 64; i++){
+    page_table->push_back(EMPTY_PTE);
+  }
+
   vector<unsigned int>* frame_table;
   list<unsigned int>* free_list;
 
@@ -134,16 +142,22 @@ int main(int argc, char** argv){
 
   MMU mmu(page_table, frame_table, free_list, prAlgo);
 
-  char operation = 0; int pageNum = 0;
+  char operation = 0; int pageNum = 0; string tmp;
 
   while(*(inFile) >> operation >> pageNum){
     if(operation == '#'){
-      cout << "Skipping the line as it is comment" << endl;
+      //cout << "Skipping the line as it is comment" << endl;
+      getline(*(inFile), tmp);
       continue;
     }
-    cout << "operation is " << operation << " page num is " << pageNum << endl;
+    if(operation == '1'){
+      //cout << "executing write ";
+      mmu.executeWrite(pageNum);
+    }else if(operation == '0'){
+      //cout << "executing read ";
+      mmu.executeRead(pageNum);
+    }
   }
 
-  cout << "Options are " << mmuAlgoStr << " " << options << " " << numFrames << " " << inputFileName << " " << randFileName << endl;
   return 0;
 }

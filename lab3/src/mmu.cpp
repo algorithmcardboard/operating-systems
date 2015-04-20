@@ -17,4 +17,7 @@ class MMU{
       free_list = fl;
       pre_algo = algo;
     }
+
+    void executeInstruction(int operation, int memRef){
+    }
 };

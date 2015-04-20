@@ -134,6 +134,16 @@ int main(int argc, char** argv){
 
   MMU mmu(page_table, frame_table, free_list, prAlgo);
 
+  char operation = 0; int pageNum = 0;
+
+  while(*(inFile) >> operation >> pageNum){
+    if(operation == '#'){
+      cout << "Skipping the line as it is comment" << endl;
+      continue;
+    }
+    cout << "operation is " << operation << " page num is " << pageNum << endl;
+  }
+
   cout << "Options are " << mmuAlgoStr << " " << options << " " << numFrames << " " << inputFileName << " " << randFileName << endl;
   return 0;
 }

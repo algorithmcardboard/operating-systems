@@ -101,7 +101,7 @@ class MMU{
 
         ftop->at(physical_frame) = pageNum; // Reverse mapping to page table
         if(printDetailed) {
-          cout << instruction_count << ": ZERO " << setfill(' ') << setw(8) << pageNum << endl;
+          cout << instruction_count << ": ZERO " << setfill(' ') << setw(8) << physical_frame << endl;
           cout << instruction_count << ": MAP  " << setfill(' ') << setw(4) << pageNum << setw(4) << physical_frame << endl;
         }
         zero_counter++;
@@ -120,8 +120,6 @@ class MMU{
           cout << instruction_count << ": UNMAP"  << setfill(' ') << setw(4) << old_page_table_to_unmap << setw(4) << physical_frame << endl;
         }
 
-        page_table->at(old_page_table_to_unmap) = old_pte_to_replace;
-
         unmap_counter++;
 
         if(old_pte_to_replace.modified == 1){
@@ -129,17 +127,19 @@ class MMU{
           old_pte_to_replace.modified = 0;
 
           if(printDetailed){
-            cout << instruction_count << ": OUT  " << setfill(' ') << setw(4) << old_page_table_to_unmap << physical_frame << endl;
+            cout << instruction_count << ": OUT  " << setfill(' ') << setw(4) << old_page_table_to_unmap << setw(4) << physical_frame << endl;
           }
 
           out_counter++;
         }
 
+        page_table->at(old_page_table_to_unmap) = old_pte_to_replace;
+
         ftop->at(physical_frame) = pageNum;  //reverse mapping
 
         if(page_table->at(pageNum).paged_out == 1){
           if(printDetailed){
-            cout << instruction_count << ": IN   " << setfill(' ') << setw(4) << pageNum << physical_frame << endl;
+            cout << instruction_count << ": IN   " << setfill(' ') << setw(4) << pageNum << setw(4) << physical_frame << endl;
           }
           in_counter++;
         }else{

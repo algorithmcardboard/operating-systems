@@ -141,12 +141,13 @@ int main(int argc, char** argv){
 
   char operation = 0; int pageNum = 0; string tmp;
 
-  while(*(inFile) >> operation >> pageNum){
+  while(*(inFile) >> operation){
     if(operation == '#'){
       //cout << "Skipping the line as it is comment" << endl;
       getline(*(inFile), tmp);
       continue;
     }
+    *(inFile) >> pageNum;
     mmu.executeOperation(operation, pageNum);
   }
 

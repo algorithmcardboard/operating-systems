@@ -150,13 +150,7 @@ int main(int argc, char** argv){
       getline(*(inFile), tmp);
       continue;
     }
-    if(operation == '1'){
-      //cout << "executing write ";
-      mmu.executeWrite(pageNum);
-    }else if(operation == '0'){
-      //cout << "executing read ";
-      mmu.executeRead(pageNum);
-    }
+    mmu.executeOperation(operation, pageNum);
   }
 
   return 0;

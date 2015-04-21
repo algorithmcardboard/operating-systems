@@ -1,3 +1,4 @@
+#include <iostream>
 class SecondChance:public AbstractPR{
   private:
   public:
@@ -5,21 +6,33 @@ class SecondChance:public AbstractPR{
     }
 
     int get_frame_to_replace(){
-      int physical_frame = frame_table->front();
-      frame_table->erase(frame_table->begin());
-      frame_table->push_back(physical_frame);
+      unsigned int physical_frame;
+      unsigned int pt_index;
 
-      int pt_index = ftop->at(physical_frame);
-      page_table->at(pt_index).referenced = 0;
+      int position = 0;
 
-      for(int i = 0; i < frame_table->size(); i++){
-        pt_index = ftop->at(i);
+      for(; position < frame_table->size(); position++){
+        physical_frame = frame_table->at(0);
+        pt_index = ftop->at(physical_frame);
+
         if(page_table->at(pt_index).referenced == 0){
           break;
         }
+        cout << "resetting reference in "<< pt_index << endl;
+        page_table->at(pt_index).referenced = 0;
+
+        frame_table->erase(frame_table->begin());
+        frame_table->push_back(physical_frame);
       }
 
-      return page_table->at(pt_index).frame_number;
+      cout << "position is "<< position << endl;
+      position = position % frame_table->size();
+
+      physical_frame = frame_table->at(0);
+      frame_table->erase(frame_table->begin()+position);
+      frame_table->push_back(physical_frame);
+
+      return physical_frame;
     }
 };
 

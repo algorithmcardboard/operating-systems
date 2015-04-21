@@ -2,15 +2,6 @@
 #include "pr_algos/abstract_pr.cpp"
 #include <iomanip>
 
-/*
-struct pte{
-  unsigned int present:1;
-  unsigned int modified:1;
-  unsigned int referenced:1;
-  unsigned int paged_out:1;
-  unsigned int frameNumber:6;
-};
- */
 using namespace std;
 
 class MMU{
@@ -79,6 +70,9 @@ class MMU{
       unsigned int physical_frame = -1;
       unsigned int old_page_table_to_unmap = -1;
 
+      if(instruction_count %10 == 0){
+      }
+
       if(printDetailed){
         cout << "==> inst: " << operation << " " << pageNum << endl;
       }
@@ -111,10 +105,9 @@ class MMU{
 
         old_page_table_to_unmap = ftop->at(physical_frame);
         
-        pte old_pte_to_replace = page_table->at(old_page_table_to_unmap);
-        
-        old_pte_to_replace.present = 0;
-        old_pte_to_replace.referenced = 0;
+        page_table->at(old_page_table_to_unmap).present = 0;
+        page_table->at(old_page_table_to_unmap).referenced = 0;
+        cout << "resetting reference while unmap "<< old_page_table_to_unmap << endl;
 
         if(printDetailed){
           cout << instruction_count << ": UNMAP"  << setfill(' ') << setw(4) << old_page_table_to_unmap << setw(4) << physical_frame << endl;
@@ -122,9 +115,9 @@ class MMU{
 
         unmap_counter++;
 
-        if(old_pte_to_replace.modified == 1){
-          old_pte_to_replace.paged_out = 1;
-          old_pte_to_replace.modified = 0;
+        if(page_table->at(old_page_table_to_unmap).modified == 1){
+          page_table->at(old_page_table_to_unmap).paged_out = 1;
+          page_table->at(old_page_table_to_unmap).modified = 0;
 
           if(printDetailed){
             cout << instruction_count << ": OUT  " << setfill(' ') << setw(4) << old_page_table_to_unmap << setw(4) << physical_frame << endl;
@@ -132,8 +125,6 @@ class MMU{
 
           out_counter++;
         }
-
-        page_table->at(old_page_table_to_unmap) = old_pte_to_replace;
 
         ftop->at(physical_frame) = pageNum;  //reverse mapping
 
@@ -156,6 +147,7 @@ class MMU{
       }
 
       page_table->at(pageNum).referenced = 1;
+      cout << "Setting referenced in "<< pageNum << endl;
       page_table->at(pageNum).present = 1;
       if(operation == WRITE){
         page_table->at(pageNum).modified = 1;

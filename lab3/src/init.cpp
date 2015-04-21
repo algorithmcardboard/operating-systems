@@ -150,5 +150,9 @@ int main(int argc, char** argv){
     mmu.executeOperation(operation, pageNum);
   }
 
+  mmu.printPageTable();
+  mmu.printFrameTable();
+  mmu.printSummary();
+
   return 0;
 }

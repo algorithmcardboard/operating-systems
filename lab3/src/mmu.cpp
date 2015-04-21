@@ -31,7 +31,7 @@ class MMU{
     unsigned int out_counter;
     unsigned int in_counter;
 
-    bool printDetailed;
+    bool printDetailed, pageTableRequired, frameTableRequired, summaryRequired;
 
   public:
     MMU(vector<pte>* pt, vector<unsigned int>* ft, vector<unsigned int>* fp, AbstractPR* algo, unsigned int frames, char* optarg){
@@ -50,6 +50,9 @@ class MMU{
       in_counter = 0;
 
       printDetailed = false;
+      pageTableRequired = false;
+      frameTableRequired = false;
+      summaryRequired = false;
 
       int i = 0;
       while(*(optarg+i) != '\0'){
@@ -59,10 +62,13 @@ class MMU{
             printDetailed = true;
             break;
           case 'P':
+            pageTableRequired = true;
             break;
           case 'F':
+            frameTableRequired = true;
             break;
           case 'S':
+            summaryRequired = true;
             break;
         }
         i++;
@@ -155,5 +161,52 @@ class MMU{
         page_table->at(pageNum).modified = 1;
       }
       instruction_count++;
+    }
+
+    void printSummary(){
+      if(!summaryRequired){
+        return;
+      }
+
+      unsigned long long cost;
+
+      cost =  instruction_count + 400 * (map_counter + unmap_counter)
+      + 3000 * (in_counter + out_counter)
+      + 150 * zero_counter;
+
+
+      cout << "SUM " << instruction_count << " U=" << unmap_counter << " M=" << map_counter;
+      cout << " I=" << in_counter << " O=" << out_counter << " Z=" << zero_counter << " ===> " << cost << endl;
+
+    }
+
+    void printPageTable(){
+      if(!pageTableRequired){
+        return;
+      }
+
+      for (int i = 0; i < page_table->size(); i++) {
+        if (page_table->at(i).present == 1) {
+          cout << i << ":";
+          page_table->at(i).referenced == 1? cout << "R": cout << "-";
+          page_table->at(i).modified == 1? cout << "M": cout << "-";
+          page_table->at(i).paged_out == 1? cout << "S": cout << "-";
+          cout << " ";
+        } else {
+          page_table->at(i).paged_out == 1? cout << "# ": cout << "* ";
+        }
+      }
+      cout << endl;
+    }
+
+    void printFrameTable(){
+      if(!frameTableRequired){
+        return;
+      }
+
+      for (int i = 0; i < ftop->size(); i++) {
+          (ftop->at(i)== -1)? cout << "* " : cout << ftop->at(i) << " ";            
+      }
+      cout << endl;
     }
 };

@@ -12,7 +12,7 @@
 
 using namespace std;
 
-AbstractPR* getMMUAlgo(char* algoStr, ifstream& fin, vector<pte>* pt, vector<unsigned int>* ft){
+AbstractPR* getMMUAlgo(char* algoStr, ifstream& fin, vector<pte>* pt, vector<unsigned int>* ft, vector<unsigned int>* ftop){
   char c = algoStr[0];
   AbstractPR* algo = NULL;
   switch(c){
@@ -44,7 +44,7 @@ AbstractPR* getMMUAlgo(char* algoStr, ifstream& fin, vector<pte>* pt, vector<uns
     case 'f':
       // FIFO
       // based on physical frames
-      algo = new FIFO(pt, ft);
+      algo = new FIFO(pt, ft, ftop);
       break;
     case 's':
       // Second chance
@@ -78,14 +78,14 @@ int main(int argc, char** argv){
 
   vector<pte>* page_table = new vector<pte>();
 
-  static const struct pte EMPTY_PTE = {1, 0, 0, 0, 0};
+  static const struct pte EMPTY_PTE = {0, 0, 0, 0, 0};
 
   for(int i = 0; i < 64; i++){
     page_table->push_back(EMPTY_PTE);
   }
 
   vector<unsigned int>* frame_table;
-  list<unsigned int>* free_list;
+  vector<unsigned int>* ftop;
 
   ifstream *inFile, *randFile;
 
@@ -128,19 +128,16 @@ int main(int argc, char** argv){
     exit(99);
   }
 
-  frame_table = new vector<unsigned int>(numFrames);
-  free_list = new list<unsigned int>();
+  frame_table = new vector<unsigned int>();
+  ftop = new vector<unsigned int>();
 
   for(int i = 0; i < numFrames; i++){
-    free_list->push_back(i);
-    frame_table->at(i) = i;
+    ftop->push_back(-1);
   }
 
-  cout << frame_table->size() << endl << free_list->size() << endl;
+  AbstractPR* prAlgo = getMMUAlgo(mmuAlgoStr, *(randFile), page_table, frame_table, ftop);
 
-  AbstractPR* prAlgo = getMMUAlgo(mmuAlgoStr, *(randFile), page_table, frame_table);
-
-  MMU mmu(page_table, frame_table, free_list, prAlgo);
+  MMU mmu(page_table, frame_table, ftop, prAlgo, numFrames, options);
 
   char operation = 0; int pageNum = 0; string tmp;
 

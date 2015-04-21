@@ -10,11 +10,13 @@ class AbstractPR{
   protected:
     vector<pte>* page_table;
     vector<unsigned int>* frame_table;
+    vector<unsigned int>* ftop;
 
   public:
-    AbstractPR(vector<pte>* pt, vector<unsigned int>* ft){
+    AbstractPR(vector<pte>* pt, vector<unsigned int>* ft, vector<unsigned int>* fp){
       this->page_table = pt;
       this->frame_table = ft;
+      this->ftop = fp;
     }
 
     virtual int get_frame_to_replace() = 0;

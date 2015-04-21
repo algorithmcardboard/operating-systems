@@ -9,6 +9,7 @@
 #include "mmu.cpp"
 #include "pr_algos/abstract_pr.cpp"
 #include "pr_algos/fifo.cpp"
+#include "pr_algos/second_chance.cpp"
 
 using namespace std;
 
@@ -49,7 +50,7 @@ AbstractPR* getMMUAlgo(char* algoStr, ifstream& fin, vector<pte>* pt, vector<uns
     case 's':
       // Second chance
       // based on physical frames
-      //algo = (char*)"Second Chance (PF)";
+      algo = new SecondChance(pt, ft, ftop);
       break;
     case 'c':
       // Clock

@@ -10,10 +10,11 @@
 #include "pr_algos/abstract_pr.cpp"
 #include "pr_algos/fifo.cpp"
 #include "pr_algos/second_chance.cpp"
+#include "pr_algos/random.cpp"
 
 using namespace std;
 
-AbstractPR* getMMUAlgo(char* algoStr, ifstream& fin, vector<pte>* pt, vector<unsigned int>* ft, vector<unsigned int>* ftop){
+AbstractPR* getMMUAlgo(char* algoStr, ifstream& randFile, vector<pte>* pt, vector<unsigned int>* ft, vector<unsigned int>* ftop){
   char c = algoStr[0];
   AbstractPR* algo = NULL;
   switch(c){
@@ -38,18 +39,12 @@ AbstractPR* getMMUAlgo(char* algoStr, ifstream& fin, vector<pte>* pt, vector<uns
       //algo = (char*)"LRU (PF)";
       break;
     case 'r':
-      // Random 
-      // based on physical frames
-      //algo = (char*)"Random (PF)";
+      algo = new Random(pt, ft, ftop, randFile);
       break;
     case 'f':
-      // FIFO
-      // based on physical frames
       algo = new FIFO(pt, ft, ftop);
       break;
     case 's':
-      // Second chance
-      // based on physical frames
       algo = new SecondChance(pt, ft, ftop);
       break;
     case 'c':

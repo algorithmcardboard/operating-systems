@@ -8,7 +8,18 @@ class SecondChance:public AbstractPR{
       int physical_frame = frame_table->front();
       frame_table->erase(frame_table->begin());
       frame_table->push_back(physical_frame);
-      return physical_frame;
+
+      int pt_index = ftop->at(physical_frame);
+      page_table->at(pt_index).referenced = 0;
+
+      for(int i = 0; i < frame_table->size(); i++){
+        pt_index = ftop->at(i);
+        if(page_table->at(pt_index).referenced == 0){
+          break;
+        }
+      }
+
+      return page_table->at(pt_index).frame_number;
     }
 };
 

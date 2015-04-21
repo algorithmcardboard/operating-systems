@@ -107,7 +107,7 @@ class MMU{
         
         page_table->at(old_page_table_to_unmap).present = 0;
         page_table->at(old_page_table_to_unmap).referenced = 0;
-        cout << "resetting reference while unmap "<< old_page_table_to_unmap << endl;
+        //cout << "resetting reference um "<< old_page_table_to_unmap << endl;
 
         if(printDetailed){
           cout << instruction_count << ": UNMAP"  << setfill(' ') << setw(4) << old_page_table_to_unmap << setw(4) << physical_frame << endl;
@@ -147,7 +147,7 @@ class MMU{
       }
 
       page_table->at(pageNum).referenced = 1;
-      cout << "Setting referenced in "<< pageNum << endl;
+      //cout << "Setting referenced in "<< pageNum << endl;
       page_table->at(pageNum).present = 1;
       if(operation == WRITE){
         page_table->at(pageNum).modified = 1;

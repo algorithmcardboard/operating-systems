@@ -11,6 +11,7 @@
 #include "pr_algos/fifo.cpp"
 #include "pr_algos/second_chance.cpp"
 #include "pr_algos/random.cpp"
+#include "pr_algos/clock.cpp"
 
 using namespace std;
 
@@ -48,9 +49,7 @@ AbstractPR* getMMUAlgo(char* algoStr, ifstream& randFile, vector<pte>* pt, vecto
       algo = new SecondChance(pt, ft, ftop);
       break;
     case 'c':
-      // Clock
-      // based on physical frames
-      //algo = (char*)"Clock (PF)";
+      algo = new Clock(pt, ft, ftop);
       break;
     case 'a':
       // Aging

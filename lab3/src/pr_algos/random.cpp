@@ -8,6 +8,9 @@ class Random:public AbstractPR{
     unsigned int size, ofs;
     int* arr;
   public:
+    void update_counter(unsigned int frame_number){
+    }
+
     Random(vector<pte>* pt, vector<unsigned int>* ft, vector<unsigned int>* ftop, ifstream& randFile): AbstractPR(pt, ft, ftop){
       fin = &(randFile);
 

@@ -11,6 +11,9 @@ class Aging:public AbstractPR{
       counter = new vector<unsigned int>(nf, 0);
     }
 
+    void update_counter(unsigned int frame_number){
+    }
+
     int get_frame_to_replace(){
 
       int physical_frame = -1, pt_index = -1;

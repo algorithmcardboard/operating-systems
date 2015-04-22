@@ -70,20 +70,15 @@ class MMU{
       unsigned int physical_frame = -1;
       unsigned int old_page_table_to_unmap = -1;
 
-      if(instruction_count %10 == 0){
-      }
-
       if(printDetailed){
         cout << "==> inst: " << operation << " " << pageNum << endl;
       }
 
       if(page_table->at(pageNum).present == 1){
-        //do nothing
+        pre_algo->update_counter(page_table->at(pageNum).frame_number);
       }else if(frame_table->size() < max_frames){
         physical_frame = frame_table->size();
         frame_table->push_back(physical_frame);
-        //reduce freelist size
-        //Zero the frame
         pte p = page_table->at(pageNum);
         p.present = 1;
         p.modified = 0;
@@ -107,7 +102,6 @@ class MMU{
         
         page_table->at(old_page_table_to_unmap).present = 0;
         page_table->at(old_page_table_to_unmap).referenced = 0;
-        //cout << "resetting reference um "<< old_page_table_to_unmap << endl;
 
         if(printDetailed){
           cout << instruction_count << ": UNMAP"  << setfill(' ') << setw(4) << old_page_table_to_unmap << setw(4) << physical_frame << endl;

@@ -19,6 +19,8 @@ class AbstractPR{
       this->ftop = fp;
     }
 
+    virtual void update_counter(unsigned int frame_number) = 0;
+
     virtual int get_frame_to_replace() = 0;
 };
 

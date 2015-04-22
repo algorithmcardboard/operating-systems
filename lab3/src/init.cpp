@@ -13,6 +13,7 @@
 #include "pr_algos/random.cpp"
 #include "pr_algos/clock.cpp"
 #include "pr_algos/aging.cpp"
+#include "pr_algos/lru.cpp"
 
 using namespace std;
 
@@ -36,9 +37,7 @@ AbstractPR* getMMUAlgo(char* algoStr, ifstream& randFile, vector<pte>* pt, vecto
       //algo = (char*)"Aging (VP)";
       break;
     case 'l':
-      // LRU (Least Reently used)
-      // based on physical frames
-      //algo = (char*)"LRU (PF)";
+      algo = new LRU(pt, ft, ftop);
       break;
     case 'r':
       algo = new Random(pt, ft, ftop, randFile);

@@ -6,6 +6,9 @@ class Clock:public AbstractPR{
       hand = 0;
     }
 
+    void update_counter(unsigned int frame_number){
+    }
+
     int get_frame_to_replace(){
       int physical_frame = frame_table->at(hand);
       int pt_index = ftop->at(physical_frame);

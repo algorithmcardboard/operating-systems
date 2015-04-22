@@ -14,6 +14,7 @@
 #include "pr_algos/clock.cpp"
 #include "pr_algos/aging.cpp"
 #include "pr_algos/lru.cpp"
+#include "pr_algos/nru.cpp"
 
 using namespace std;
 
@@ -22,9 +23,7 @@ AbstractPR* getMMUAlgo(char* algoStr, ifstream& randFile, vector<pte>* pt, vecto
   AbstractPR* algo = NULL;
   switch(c){
     case 'N':
-      // NRU (four classes)
-      // based on virtual pages
-      //algo = (char*)"NRU (VP)";
+      algo = new NRU(pt, ft, ftop, randFile);
       break;
     case 'X':
       // Clock

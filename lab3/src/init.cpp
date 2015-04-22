@@ -15,6 +15,7 @@
 #include "pr_algos/aging.cpp"
 #include "pr_algos/lru.cpp"
 #include "pr_algos/nru.cpp"
+#include "pr_algos/virtual_clock.cpp"
 
 using namespace std;
 
@@ -26,9 +27,7 @@ AbstractPR* getMMUAlgo(char* algoStr, ifstream& randFile, vector<pte>* pt, vecto
       algo = new NRU(pt, ft, ftop, randFile);
       break;
     case 'X':
-      // Clock
-      // based on virtual pages
-      //algo = (char*)"Clock (VP)";
+      algo = new VirtualClock(pt, ft, ftop);
       break;
     case 'Y':
       // Aging

@@ -12,10 +12,11 @@
 #include "pr_algos/second_chance.cpp"
 #include "pr_algos/random.cpp"
 #include "pr_algos/clock.cpp"
+#include "pr_algos/aging.cpp"
 
 using namespace std;
 
-AbstractPR* getMMUAlgo(char* algoStr, ifstream& randFile, vector<pte>* pt, vector<unsigned int>* ft, vector<unsigned int>* ftop){
+AbstractPR* getMMUAlgo(char* algoStr, ifstream& randFile, vector<pte>* pt, vector<unsigned int>* ft, vector<unsigned int>* ftop, int nf){
   char c = algoStr[0];
   AbstractPR* algo = NULL;
   switch(c){
@@ -52,9 +53,7 @@ AbstractPR* getMMUAlgo(char* algoStr, ifstream& randFile, vector<pte>* pt, vecto
       algo = new Clock(pt, ft, ftop);
       break;
     case 'a':
-      // Aging
-      // based on physical frames
-      //algo = (char*)"Aging (PF)";
+      algo = new Aging(pt, ft, ftop, nf);
       break;
     default:
       algo = NULL;
@@ -130,7 +129,7 @@ int main(int argc, char** argv){
     ftop->push_back(-1);
   }
 
-  AbstractPR* prAlgo = getMMUAlgo(mmuAlgoStr, *(randFile), page_table, frame_table, ftop);
+  AbstractPR* prAlgo = getMMUAlgo(mmuAlgoStr, *(randFile), page_table, frame_table, ftop, numFrames);
 
   MMU mmu(page_table, frame_table, ftop, prAlgo, numFrames, options);
 

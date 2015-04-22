@@ -126,6 +126,7 @@ class MMU{
           out_counter++;
         }
 
+        page_table->at(pageNum).frame_number = physical_frame;
         ftop->at(physical_frame) = pageNum;  //reverse mapping
 
         if(page_table->at(pageNum).paged_out == 1){

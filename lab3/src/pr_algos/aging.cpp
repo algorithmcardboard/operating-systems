@@ -25,7 +25,7 @@ class Aging:public AbstractPR{
         cValue >> 1;
 
         if(page_table->at(pt_index).referenced == 1){
-          cValue = cValue | (1 << 31);
+          cValue = cValue | 0x80000000;
           page_table->at(pt_index).referenced = 0;
         }
 
@@ -50,4 +50,3 @@ class Aging:public AbstractPR{
       return fNumber;
     }
 };
-

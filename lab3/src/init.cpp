@@ -16,10 +16,11 @@
 #include "pr_algos/lru.cpp"
 #include "pr_algos/nru.cpp"
 #include "pr_algos/virtual_clock.cpp"
+#include "pr_algos/virtual_aging.cpp"
 
 using namespace std;
 
-AbstractPR* getMMUAlgo(char* algoStr, ifstream& randFile, vector<pte>* pt, vector<unsigned int>* ft, vector<unsigned int>* ftop, int nf){
+AbstractPR* getMMUAlgo(char* algoStr, ifstream& randFile, vector<pte>* pt, vector<unsigned int>* ft, vector<unsigned int>* ftop, int nf, int np){
   char c = algoStr[0];
   AbstractPR* algo = NULL;
   switch(c){
@@ -30,9 +31,7 @@ AbstractPR* getMMUAlgo(char* algoStr, ifstream& randFile, vector<pte>* pt, vecto
       algo = new VirtualClock(pt, ft, ftop);
       break;
     case 'Y':
-      // Aging
-      // based on virtual pages
-      //algo = (char*)"Aging (VP)";
+      algo = new VirtualAging(pt, ft, ftop, np);
       break;
     case 'l':
       algo = new LRU(pt, ft, ftop);
@@ -126,7 +125,7 @@ int main(int argc, char** argv){
     ftop->push_back(-1);
   }
 
-  AbstractPR* prAlgo = getMMUAlgo(mmuAlgoStr, *(randFile), page_table, frame_table, ftop, numFrames);
+  AbstractPR* prAlgo = getMMUAlgo(mmuAlgoStr, *(randFile), page_table, frame_table, ftop, numFrames, 64);
 
   MMU mmu(page_table, frame_table, ftop, prAlgo, numFrames, options);
 

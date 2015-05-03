@@ -6,4 +6,4 @@ compile: init.cpp
 
 .PHONY : clean
 clean:
-	-rm mmu
+	-rm iosched 

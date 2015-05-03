@@ -22,8 +22,15 @@ class SCAN: public AbstractScheduler{
       int locToErase = -1;
       int minLeftDistance = INT_MAX, minRightDistance = INT_MAX, leftLoc = -1, rightLoc = -1;
       unsigned int track_distance;
+      bool skip = false;
       for(int i=0; i < request_list.size(); i++){
         track_distance = abs(request_list[i]->getTrackNumber() - track_location);
+        if(track_distance == 0){
+          skip = true;
+          locToErase = i;
+          ioToReturn = request_list[i];
+          break;
+        }
         //cout << request_list[i]->getTrackNumber() << ":" << track_distance << " ";
         if(request_list[i]->getTrackNumber() < track_location){
           if(track_distance < minLeftDistance){
@@ -41,22 +48,24 @@ class SCAN: public AbstractScheduler{
       }
       //cout << endl;
 
-      if(positive && minToRight == NULL){
-        ioToReturn = minToLeft;
-        locToErase = leftLoc;
+      if(!skip){
+        if(positive && minToRight == NULL){
+          ioToReturn = minToLeft;
+          locToErase = leftLoc;
 
-        positive = !positive;
-      }else if(positive && minToRight != NULL){
-        ioToReturn = minToRight;
-        locToErase = rightLoc;
-      }else if(!positive && minToLeft == NULL){
-        ioToReturn = minToRight;
-        locToErase = rightLoc;
+          positive = !positive;
+        }else if(positive && minToRight != NULL){
+          ioToReturn = minToRight;
+          locToErase = rightLoc;
+        }else if(!positive && minToLeft == NULL){
+          ioToReturn = minToRight;
+          locToErase = rightLoc;
 
-        positive = !positive;
-      }else{
-        ioToReturn = minToLeft;
-        locToErase = leftLoc;
+          positive = !positive;
+        }else{
+          ioToReturn = minToLeft;
+          locToErase = leftLoc;
+        }
       }
 
       request_list.erase(request_list.begin() + locToErase);

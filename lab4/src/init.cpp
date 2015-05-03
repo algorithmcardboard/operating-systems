@@ -31,10 +31,10 @@ AbstractScheduler* getAlgorithm(char algoChar){
     case 's':
       algo = new SCAN();
       break;
-      /*
     case 'c':
       algo = new CSCAN();
       break;
+      /*
     case 'f':
       algo = new FSCAN();
       break;

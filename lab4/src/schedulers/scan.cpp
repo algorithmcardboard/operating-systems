@@ -84,5 +84,3 @@ class SCAN: public AbstractScheduler{
       request_list.insert(request_list.begin() + loc, req);
     }
 };
-
-

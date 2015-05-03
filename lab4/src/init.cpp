@@ -28,10 +28,10 @@ AbstractScheduler* getAlgorithm(char algoChar){
     case 'j':
       algo = new SSTF();
       break;
-      /*
     case 's':
       algo = new SCAN();
       break;
+      /*
     case 'c':
       algo = new CSCAN();
       break;
@@ -107,7 +107,9 @@ int main(int argc, char** argv){
     eve_queue.push(event);
   }
 
-  cout << "TRACE" << endl;
+  if(verbose){
+    cout << "TRACE" << endl;
+  }
   Event* cur_event;
   unsigned int cur_time = 0, cur_track = 0, total_movement = 0;
   unsigned int track_movement = 0;
@@ -117,8 +119,10 @@ int main(int argc, char** argv){
     switch(cur_event->getOperation()){
       case ADD:
         absScheduler->add_track_request(io_requests[cur_event->getId()]);
-        cout << cur_event->getTimestamp() << ":" 
-          << setw(6) << setfill(' ') << cur_event->getId() << " add " << cur_event->getTrack() << endl;
+        if(verbose){
+          cout << cur_event->getTimestamp() << ":" 
+            << setw(6) << setfill(' ') << cur_event->getId() << " add " << cur_event->getTrack() << endl;
+        }
         break;
       case ISSUE:
         req = io_requests[cur_event->getId()];
@@ -129,8 +133,10 @@ int main(int argc, char** argv){
 
         eve_queue.push(new Event(cur_time + track_movement, cur_event->getTrack(), cur_event->getId(), FINISH));
 
-        cout << cur_event->getTimestamp() << ":" << setw(6) << setfill(' ') 
-          << cur_event->getId() << " issue " << cur_event->getTrack() << " " << cur_track << endl;
+        if(verbose){
+          cout << cur_event->getTimestamp() << ":" << setw(6) << setfill(' ') 
+            << cur_event->getId() << " issue " << cur_event->getTrack() << " " << cur_track << endl;
+        }
         cur_track = cur_event->getTrack();
 
         break;
@@ -138,8 +144,10 @@ int main(int argc, char** argv){
         req = io_requests[cur_event->getId()];
         req->setFinishTime(cur_time);
 
-        cout << cur_event->getTimestamp() << ":" << setw(6) << setfill(' ') 
-          << cur_event->getId() << " finish " << io_requests[cur_event->getId()]->getTotalTime() << endl;
+        if(verbose){
+          cout << cur_event->getTimestamp() << ":" << setw(6) << setfill(' ') 
+            << cur_event->getId() << " finish " << io_requests[cur_event->getId()]->getTotalTime() << endl;
+        }
 
         break;
     }
@@ -156,14 +164,18 @@ int main(int argc, char** argv){
 
   unsigned int max_wait = 0;
   double average_turnaround_time = 0, average_wait_time = 0;
-  cout << "IOREQS INFO" << endl;
+  if(verbose){
+    cout << "IOREQS INFO" << endl;
+  }
   for(int i = 0; i < io_requests.size(); i++){
     average_turnaround_time += io_requests[i]->getTotalTime();
     average_wait_time += io_requests[i]->getWaitTime();
     if(io_requests[i]->getWaitTime() > max_wait){
       max_wait = io_requests[i]->getWaitTime();
     }
-    cout << *(io_requests[i]);
+    if(verbose){
+      cout << *(io_requests[i]);
+    }
   }
 
   average_turnaround_time /= io_requests.size();

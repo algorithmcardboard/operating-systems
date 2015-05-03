@@ -8,7 +8,7 @@ using namespace std;
 
 class AbstractScheduler{
   public:
-    virtual IoRequest* get_next_track() = 0;
+    virtual IoRequest* get_next_track(unsigned int) = 0;
     virtual void add_track_request(IoRequest*) = 0;
 };
 

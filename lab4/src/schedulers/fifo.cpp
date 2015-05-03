@@ -8,7 +8,7 @@ class FIFO : public AbstractScheduler{
     vector<IoRequest*> request_list;
 
   public:
-    IoRequest* get_next_track(){
+    IoRequest* get_next_track(unsigned int track_location){
       //cout << "Size of request list is " << request_list.size() << endl;
       if(request_list.size() == 0){
         return NULL;

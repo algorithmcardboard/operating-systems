@@ -25,10 +25,10 @@ AbstractScheduler* getAlgorithm(char algoChar){
     case 'i':
       algo = new FIFO();
       break;
-      /*
     case 'j':
       algo = new SSTF();
       break;
+      /*
     case 's':
       algo = new SCAN();
       break;
@@ -137,12 +137,14 @@ int main(int argc, char** argv){
       case FINISH:
         req = io_requests[cur_event->getId()];
         req->setFinishTime(cur_time);
+
         cout << cur_event->getTimestamp() << ":" << setw(6) << setfill(' ') 
           << cur_event->getId() << " finish " << io_requests[cur_event->getId()]->getTotalTime() << endl;
+
         break;
     }
     if(cur_time >= nextIOTime){
-      IoRequest* req = absScheduler->get_next_track();
+      IoRequest* req = absScheduler->get_next_track(cur_track);
       if(req == NULL){
         continue;
       }

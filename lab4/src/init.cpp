@@ -34,11 +34,9 @@ AbstractScheduler* getAlgorithm(char algoChar){
     case 'c':
       algo = new CSCAN();
       break;
-      /*
     case 'f':
       algo = new FSCAN();
       break;
-      */
   }
   return algo;
 }

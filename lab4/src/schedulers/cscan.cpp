@@ -7,13 +7,8 @@ using namespace std;
 class CSCAN: public AbstractScheduler{
   private:
     vector<IoRequest*> request_list;
-    unsigned int global_index;
 
   public:
-    CSCAN(){
-      global_index = 0;
-    }
-
     IoRequest* get_next_track(unsigned int track_location){
       if(request_list.size() == 0){
         return NULL;
